@@ -229,7 +229,12 @@ with tab_szybki:
             unsafe_allow_html=True,
         )
     with col_margin:
-        marza_m = st.number_input(T["new_margin"].replace("Nowa ", "").replace("New ", ""), min_value=0.0, step=0.01, key="marza_m")
+        marza_m = st.number_input(
+            T["new_margin"].replace("Nowa ", "").replace("New ", "").capitalize(),
+            min_value=0.0,
+            step=0.01,
+            key="marza_m",
+        )
 
     if st.button(T["btn_quick"], key="quick_btn"):
         pola = [tkw_m > 0, cena_m > 0, marza_m > 0]
