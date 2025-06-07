@@ -73,9 +73,39 @@ T = PL if lang == "Polski" else EN
 # ------------------ Funkcje matematyczne -------------------
 
 def licz_marze_z_ceny(tkw: float, cena: float) -> float:
+    """Calculate margin fraction from unit cost and price.
+
+    Parameters
+    ----------
+    tkw : float
+        Unit production cost.
+    cena : float
+        Sale price per unit.
+
+    Returns
+    -------
+    float
+        Margin expressed as a fraction of the price. Returns ``0.0`` when
+        the price is zero.
+    """
     return (cena - tkw) / cena if cena else 0.0
 
 def cena_z_marzy(tkw: float, marza: float) -> float:
+    """Calculate sale price required for a given margin.
+
+    Parameters
+    ----------
+    tkw : float
+        Unit production cost.
+    marza : float
+        Desired margin expressed as a fraction (e.g. ``0.25`` for 25%).
+
+    Returns
+    -------
+    float
+        Sale price that yields the desired margin. Returns ``0.0`` when the
+        provided margin is ``1`` or greater.
+    """
     return tkw / (1 - marza) if marza < 1 else 0.0
 
 # ------------------ UI -------------------------------------
