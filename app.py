@@ -74,38 +74,37 @@ T = PL if lang == "Polski" else EN
 # ------------------ Funkcje matematyczne -------------------
 
 def licz_marze_z_ceny(tkw: Decimal, cena: Decimal) -> Decimal:
-    """Calculate margin fraction from unit cost and price.
+    """Return margin as a fraction of the selling price.
 
     Parameters
     ----------
     tkw : Decimal
         Unit production cost.
     cena : Decimal
-        Sale price per unit.
+        Selling price per unit.
 
     Returns
     -------
     Decimal
-        Margin expressed as a fraction of the price. Returns ``Decimal('0')`` when
-        the price is zero.
+        Margin fraction. ``Decimal('0')`` is returned when ``cena`` is zero.
     """
     return (cena - tkw) / cena if cena else Decimal("0")
 
 def cena_z_marzy(tkw: Decimal, marza: Decimal) -> Decimal:
-    """Calculate sale price required for a given margin.
+    """Return sale price required to achieve a given margin.
 
     Parameters
     ----------
     tkw : Decimal
         Unit production cost.
     marza : Decimal
-        Desired margin expressed as a fraction (e.g. ``0.25`` for 25%).
+        Desired margin expressed as a fraction (``0.25`` means 25%).
 
     Returns
     -------
     Decimal
-        Sale price that yields the desired margin. Returns ``Decimal('0')`` when the
-        provided margin is ``1`` or greater.
+        Price that yields ``marza`` margin. ``Decimal('0')`` is returned for
+        margins greater than or equal to ``1``.
     """
     return tkw / (Decimal("1") - marza) if marza < Decimal("1") else Decimal("0")
 
