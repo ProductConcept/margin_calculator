@@ -1,4 +1,5 @@
 import streamlit as st
+from decimal import Decimal
 
 # ------------------ Konfiguracja / Config ------------------
 st.set_page_config(
@@ -72,41 +73,41 @@ T = PL if lang == "Polski" else EN
 
 # ------------------ Funkcje matematyczne -------------------
 
-def licz_marze_z_ceny(tkw: float, cena: float) -> float:
+def licz_marze_z_ceny(tkw: Decimal, cena: Decimal) -> Decimal:
     """Calculate margin fraction from unit cost and price.
 
     Parameters
     ----------
-    tkw : float
+    tkw : Decimal
         Unit production cost.
-    cena : float
+    cena : Decimal
         Sale price per unit.
 
     Returns
     -------
-    float
-        Margin expressed as a fraction of the price. Returns ``0.0`` when
+    Decimal
+        Margin expressed as a fraction of the price. Returns ``Decimal('0')`` when
         the price is zero.
     """
-    return (cena - tkw) / cena if cena else 0.0
+    return (cena - tkw) / cena if cena else Decimal("0")
 
-def cena_z_marzy(tkw: float, marza: float) -> float:
+def cena_z_marzy(tkw: Decimal, marza: Decimal) -> Decimal:
     """Calculate sale price required for a given margin.
 
     Parameters
     ----------
-    tkw : float
+    tkw : Decimal
         Unit production cost.
-    marza : float
+    marza : Decimal
         Desired margin expressed as a fraction (e.g. ``0.25`` for 25%).
 
     Returns
     -------
-    float
-        Sale price that yields the desired margin. Returns ``0.0`` when the
+    Decimal
+        Sale price that yields the desired margin. Returns ``Decimal('0')`` when the
         provided margin is ``1`` or greater.
     """
-    return tkw / (1 - marza) if marza < 1 else 0.0
+    return tkw / (Decimal("1") - marza) if marza < Decimal("1") else Decimal("0")
 
 # ------------------ UI -------------------------------------
 st.title(T["title"])
@@ -151,20 +152,28 @@ with tab_obnizka:
             st.stop()
 
         if marza_stara:
-            cena_stara = cena_z_marzy(tkw, marza_stara / 100)
+            cena_stara = float(
+                cena_z_marzy(Decimal(tkw), Decimal(marza_stara) / Decimal(100))
+            )
         elif not cena_stara:
             st.error(T["err_pair_old"])
             st.stop()
         else:
-            marza_stara = licz_marze_z_ceny(tkw, cena_stara) * 100
+            marza_stara = float(
+                licz_marze_z_ceny(Decimal(tkw), Decimal(cena_stara))
+            ) * 100
 
         if marza_nowa:
-            cena_nowa = cena_z_marzy(tkw, marza_nowa / 100)
+            cena_nowa = float(
+                cena_z_marzy(Decimal(tkw), Decimal(marza_nowa) / Decimal(100))
+            )
         elif not cena_nowa:
             st.error(T["err_pair_new"])
             st.stop()
         else:
-            marza_nowa = licz_marze_z_ceny(tkw, cena_nowa) * 100
+            marza_nowa = float(
+                licz_marze_z_ceny(Decimal(tkw), Decimal(cena_nowa))
+            ) * 100
 
         zysk_stary = cena_stara - tkw
         zysk_nowy = cena_nowa - tkw
@@ -219,9 +228,13 @@ with tab_szybki:
             st.stop()
 
         if cena_m and tkw_m:
-            marza_m = licz_marze_z_ceny(tkw_m, cena_m) * 100
+            marza_m = float(
+                licz_marze_z_ceny(Decimal(tkw_m), Decimal(cena_m))
+            ) * 100
         elif tkw_m and marza_m:
-            cena_m = cena_z_marzy(tkw_m, marza_m / 100)
+            cena_m = float(
+                cena_z_marzy(Decimal(tkw_m), Decimal(marza_m) / Decimal(100))
+            )
         elif cena_m and marza_m:
             tkw_m = cena_m * (1 - marza_m / 100)
 
