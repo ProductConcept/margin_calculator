@@ -71,6 +71,65 @@ EN = {
 lang = st.sidebar.selectbox("Language / Język", ("Polski", "English"))
 T = PL if lang == "Polski" else EN
 
+# ------------------ Session state defaults -----------------
+INITIAL_DISCOUNT = {
+    "tkw": 0.0,
+    "cena_stara": 0.0,
+    "marza_stara": 0.0,
+    "cena_nowa": 0.0,
+    "marza_nowa": 0.0,
+    "ilosc_stara": 0,
+}
+
+INITIAL_QUICK = {
+    "tkw_m": 0.0,
+    "cena_m": 0.0,
+    "marza_m": 0.0,
+}
+
+EXAMPLE_DISCOUNT = {
+    "tkw": 80.0,
+    "cena_stara": 120.0,
+    "marza_stara": 33.33,
+    "cena_nowa": 100.0,
+    "marza_nowa": 20.0,
+    "ilosc_stara": 100,
+}
+
+EXAMPLE_QUICK = {
+    "tkw_m": 50.0,
+    "cena_m": 100.0,
+    "marza_m": 50.0,
+}
+
+for k, v in {**INITIAL_DISCOUNT, **INITIAL_QUICK}.items():
+    st.session_state.setdefault(k, v)
+
+
+def _clear_field(key: str, init_dict: dict) -> None:
+    """Reset a single field in ``st.session_state`` to its initial value."""
+    st.session_state[key] = init_dict[key]
+
+
+def clear_discount_all() -> None:
+    for k in INITIAL_DISCOUNT:
+        st.session_state[k] = INITIAL_DISCOUNT[k]
+
+
+def load_discount_example() -> None:
+    for k in INITIAL_DISCOUNT:
+        st.session_state[k] = EXAMPLE_DISCOUNT[k]
+
+
+def clear_quick_all() -> None:
+    for k in INITIAL_QUICK:
+        st.session_state[k] = INITIAL_QUICK[k]
+
+
+def load_quick_example() -> None:
+    for k in INITIAL_QUICK:
+        st.session_state[k] = EXAMPLE_QUICK[k]
+
 # ------------------ Funkcje matematyczne -------------------
 
 def licz_marze_z_ceny(tkw: Decimal, cena: Decimal) -> Decimal:
@@ -130,31 +189,43 @@ with tab_obnizka:
 
     col_a, col_or1, col_b = st.columns([1, 0.15, 1])
     with col_a:
-        tkw = st.number_input(T["tkw"], min_value=0.0, step=0.01)
+        tkw = st.number_input(T["tkw"], min_value=0.0, step=0.01, key="tkw")
+        st.button("Clear", key="clr_tkw", on_click=_clear_field, args=("tkw", INITIAL_DISCOUNT))
     with col_or1:
         st.markdown(
             f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>",
             unsafe_allow_html=True,
         )
     with col_b:
-        cena_stara = st.number_input(T["price"], min_value=0.0, step=0.01)
+        cena_stara = st.number_input(T["price"], min_value=0.0, step=0.01, key="cena_stara")
+        st.button("Clear", key="clr_cena_stara", on_click=_clear_field, args=("cena_stara", INITIAL_DISCOUNT))
 
     col_c, col_or2, col_d = st.columns([1, 0.15, 1])
     with col_c:
-        marza_stara = st.number_input(T["old_margin"], min_value=0.0, step=0.01, format="%.2f")
+        marza_stara = st.number_input(T["old_margin"], min_value=0.0, step=0.01, format="%.2f", key="marza_stara")
+        st.button("Clear", key="clr_marza_stara", on_click=_clear_field, args=("marza_stara", INITIAL_DISCOUNT))
     with col_or2:
         st.markdown(
             f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>",
             unsafe_allow_html=True,
         )
     with col_d:
-        cena_nowa = st.number_input(T["new_price"], min_value=0.0, step=0.01)
+        cena_nowa = st.number_input(T["new_price"], min_value=0.0, step=0.01, key="cena_nowa")
+        st.button("Clear", key="clr_cena_nowa", on_click=_clear_field, args=("cena_nowa", INITIAL_DISCOUNT))
 
     col_e, col_f = st.columns([1, 1])
     with col_e:
-        marza_nowa = st.number_input(T["new_margin"], min_value=0.0, step=0.01, format="%.2f")
+        marza_nowa = st.number_input(T["new_margin"], min_value=0.0, step=0.01, format="%.2f", key="marza_nowa")
+        st.button("Clear", key="clr_marza_nowa", on_click=_clear_field, args=("marza_nowa", INITIAL_DISCOUNT))
     with col_f:
-        ilosc_stara = st.number_input(T["qty"], min_value=0, step=1)
+        ilosc_stara = st.number_input(T["qty"], min_value=0, step=1, key="ilosc_stara")
+        st.button("Clear", key="clr_ilosc_stara", on_click=_clear_field, args=("ilosc_stara", INITIAL_DISCOUNT))
+
+    col_actions_d1, col_actions_d2 = st.columns([1, 1])
+    with col_actions_d1:
+        st.button("Clear all", key="clear_all_discount", on_click=clear_discount_all)
+    with col_actions_d2:
+        st.button("Load example", key="example_discount", on_click=load_discount_example)
 
     if st.button(T["btn_discount"], key="discount_btn"):
         if tkw == 0 or ilosc_stara == 0:
@@ -216,6 +287,7 @@ with tab_szybki:
     col_tkw, col_or_a, col_price, col_or_b, col_margin = st.columns([1, 0.13, 1, 0.13, 1])
     with col_tkw:
         tkw_m = st.number_input(T["tkw"], min_value=0.0, step=0.01, key="tkw_m")
+        st.button("Clear", key="clr_tkw_m", on_click=_clear_field, args=("tkw_m", INITIAL_QUICK))
     with col_or_a:
         st.markdown(
             f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>",
@@ -223,6 +295,7 @@ with tab_szybki:
         )
     with col_price:
         cena_m = st.number_input(T["price"], min_value=0.0, step=0.01, key="cena_m")
+        st.button("Clear", key="clr_cena_m", on_click=_clear_field, args=("cena_m", INITIAL_QUICK))
     with col_or_b:
         st.markdown(
             f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>",
@@ -235,6 +308,13 @@ with tab_szybki:
             step=0.01,
             key="marza_m",
         )
+        st.button("Clear", key="clr_marza_m", on_click=_clear_field, args=("marza_m", INITIAL_QUICK))
+
+    col_actions_q1, col_actions_q2 = st.columns([1, 1])
+    with col_actions_q1:
+        st.button("Clear all", key="clear_all_quick", on_click=clear_quick_all)
+    with col_actions_q2:
+        st.button("Load example", key="example_quick", on_click=load_quick_example)
 
     if st.button(T["btn_quick"], key="quick_btn"):
         pola = [tkw_m > 0, cena_m > 0, marza_m > 0]
