@@ -37,6 +37,12 @@ class TestMarginFunctions(unittest.TestCase):
             Decimal('-0.3333333333333333333333333333')
         )
 
+    def test_licz_marze_zero_margin(self):
+        self.assertEqual(
+            licz_marze_z_ceny(Decimal('50'), Decimal('50')),
+            Decimal('0')
+        )
+
     def test_cena_z_marzy_basic(self):
         self.assertEqual(
             cena_z_marzy(Decimal('50'), Decimal('0.2')),
@@ -47,6 +53,12 @@ class TestMarginFunctions(unittest.TestCase):
         self.assertEqual(
             cena_z_marzy(Decimal('10'), Decimal('1')),
             Decimal('0')
+        )
+
+    def test_cena_z_marzy_zero_margin(self):
+        self.assertEqual(
+            cena_z_marzy(Decimal('10'), Decimal('0')),
+            Decimal('10')
         )
 
 
