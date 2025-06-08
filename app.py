@@ -139,11 +139,13 @@ def _clear_field(key: str, init_dict: dict) -> None:
 
 
 def clear_discount_all() -> None:
+    """Reset all discount form fields to their default values."""
     for k in INITIAL_DISCOUNT:
         st.session_state[k] = INITIAL_DISCOUNT[k]
 
 
 def load_discount_example() -> None:
+    """Load example values for the discount calculator."""
     toggle = st.session_state.get("example_toggle", 0)
     example = EXAMPLE_DISCOUNT_PRICE if toggle == 0 else EXAMPLE_DISCOUNT_MARGIN
     for k in INITIAL_DISCOUNT:
@@ -152,11 +154,13 @@ def load_discount_example() -> None:
 
 
 def clear_quick_all() -> None:
+    """Reset all quick calculator fields to their default values."""
     for k in INITIAL_QUICK:
         st.session_state[k] = INITIAL_QUICK[k]
 
 
 def load_quick_example() -> None:
+    """Load example values for the quick calculator."""
     for k in INITIAL_QUICK:
         st.session_state[k] = EXAMPLE_QUICK[k]
 
