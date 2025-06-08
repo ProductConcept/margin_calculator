@@ -206,11 +206,12 @@ def _on_tab_change() -> None:
 
 
 st.radio(
-    label="",
+    label="Calculator mode",
     options=tab_labels,
     index=0 if st.session_state["selected_tab"] == "discount" else 1,
     key="tab_choice",
     on_change=_on_tab_change,
+    label_visibility="collapsed",
 )
 
 # ========= Zakładka 1: obniżka marży / ceny ================
