@@ -5,7 +5,7 @@ This project contains a simple margin calculator built with [Streamlit](https://
 1. **Margin / price drop** – calculates the sales volume increase needed to maintain profit when the margin or price is reduced.
 2. **Quick margin calculator** – quickly derives margin, price or unit cost when any two of these values are provided.
 
-The application supports both Polish and English languages and runs entirely in the browser using Streamlit.
+The application supports both Polish and English languages and runs entirely in the browser using Streamlit. It can be launched locally or deployed on [Streamlit Community Cloud](https://streamlit.io/cloud). To start it locally simply run `streamlit run app.py`.
 
 ## Setup
 
