@@ -1,9 +1,6 @@
 import unittest
 from decimal import Decimal
-from pathlib import Path
-import sys
 
-sys.path.append(str(Path(__file__).resolve().parents[1]))
 from calculator import licz_marze_z_ceny, cena_z_marzy
 
 
