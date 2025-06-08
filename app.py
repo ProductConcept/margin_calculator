@@ -185,7 +185,9 @@ def _on_tab_change() -> None:
         clear_quick_all()
         st.session_state["selected_tab"] = new_key
         st.query_params.update({"tab": new_key})
-        st.rerun()
+        # rerun to refresh the UI is no longer needed as the radio widget
+        # handles tab switching without a warning
+        # st.rerun()
 
 
 st.radio(
