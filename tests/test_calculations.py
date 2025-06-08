@@ -1,21 +1,10 @@
-import ast
 import unittest
 from decimal import Decimal
 from pathlib import Path
+import sys
 
-
-def _load_functions():
-    """Load calculation functions from app.py without running Streamlit UI."""
-    tree = ast.parse(Path(__file__).resolve().parents[1].joinpath('app.py').read_text(), filename='app.py')
-    namespace = {'Decimal': Decimal}
-    for node in tree.body:
-        if isinstance(node, ast.FunctionDef) and node.name in {'licz_marze_z_ceny', 'cena_z_marzy'}:
-            mod = ast.Module(body=[node], type_ignores=[])
-            exec(compile(mod, filename='app.py', mode='exec'), namespace)
-    return namespace['licz_marze_z_ceny'], namespace['cena_z_marzy']
-
-
-licz_marze_z_ceny, cena_z_marzy = _load_functions()
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+from calculator import licz_marze_z_ceny, cena_z_marzy
 
 
 class TestMarginFunctions(unittest.TestCase):
