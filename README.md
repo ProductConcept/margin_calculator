@@ -9,13 +9,24 @@ The application supports both Polish and English languages and runs entirely in 
 
 ## Setup
 
-Install the package in editable mode and set up the pre-commit hooks before starting the application:
+Install the package in editable mode **before starting the application** and set up the pre-commit hooks:
 
 ```bash
 pip install -e .
 pip install pre-commit
 pre-commit install
+```
+
+Start the application from the project root:
+
+```bash
 streamlit run app.py
+```
+
+If the package isn't installed, you can also launch it from the repository's parent directory:
+
+```bash
+streamlit run margin_calculator/app.py
 ```
 
 By default Streamlit launches at `http://localhost:8501`. Open this address in your browser to access the calculator.
