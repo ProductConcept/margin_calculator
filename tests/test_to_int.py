@@ -1,13 +1,10 @@
-import logging
 from pathlib import Path
 import sys
 
 # Allow importing from repo root
 sys.path.append(str(Path(__file__).resolve().parents[1]))
-# Silence Streamlit warnings when importing app
-logging.getLogger("streamlit").setLevel(logging.CRITICAL)
 
-from app import _to_int
+from utils import _to_int
 
 
 def test_to_int_valid_strings():

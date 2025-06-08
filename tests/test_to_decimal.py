@@ -1,14 +1,11 @@
-import logging
 from decimal import Decimal
 from pathlib import Path
 import sys
 
 # Allow importing from repo root
 sys.path.append(str(Path(__file__).resolve().parents[1]))
-# Silence Streamlit warnings when importing app
-logging.getLogger("streamlit").setLevel(logging.CRITICAL)
 
-from app import _to_decimal
+from utils import _to_decimal
 
 
 def test_to_decimal_with_dot_and_comma():
