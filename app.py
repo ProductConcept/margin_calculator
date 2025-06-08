@@ -187,8 +187,8 @@ from calculator import licz_marze_z_ceny, cena_z_marzy
 st.title(T["title"])
 
 # determine active tab from query params or session state
-query = st.experimental_get_query_params()
-default_tab = query.get("tab", ["discount"])[0]
+query = st.query_params
+default_tab = query.get("tab", "discount")
 st.session_state.setdefault("selected_tab", default_tab)
 
 tab_labels = [T["tab_discount"], T["tab_quick"]]
@@ -201,8 +201,8 @@ def _on_tab_change() -> None:
         clear_discount_all()
         clear_quick_all()
         st.session_state["selected_tab"] = new_key
-        st.experimental_set_query_params(tab=new_key)
-        st.experimental_rerun()
+        st.query_params.update({"tab": new_key})
+        st.rerun()
 
 
 st.radio(
