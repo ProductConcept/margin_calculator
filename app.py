@@ -2,7 +2,7 @@
 
 from decimal import Decimal
 import streamlit as st
-from utils import _to_decimal, _to_int
+
 from calculator import licz_marze_z_ceny, cena_z_marzy
 
 # ------------------ Konfiguracja / Config ------------------
@@ -90,42 +90,42 @@ T = PL if lang == "Polski" else EN
 
 # ------------------ Session state defaults -----------------
 INITIAL_DISCOUNT = {
-    "tkw": "",
-    "cena_stara": "",
-    "marza_stara": "",
-    "cena_nowa": "",
-    "marza_nowa": "",
-    "ilosc_stara": "",
+    "tkw": 0.0,
+    "cena_stara": 0.0,
+    "marza_stara": 0.0,
+    "cena_nowa": 0.0,
+    "marza_nowa": 0.0,
+    "ilosc_stara": 0,
 }
 
 INITIAL_QUICK = {
-    "tkw_m": "",
-    "cena_m": "",
-    "marza_m": "",
+    "tkw_m": 0.0,
+    "cena_m": 0.0,
+    "marza_m": 0.0,
 }
 
 EXAMPLE_DISCOUNT_PRICE = {
-    "tkw": "80.0",
-    "cena_stara": "120.0",
-    "marza_stara": "",
-    "cena_nowa": "100.0",
-    "marza_nowa": "",
-    "ilosc_stara": "100",
+    "tkw": 80.0,
+    "cena_stara": 120.0,
+    "marza_stara": 0.0,
+    "cena_nowa": 100.0,
+    "marza_nowa": 0.0,
+    "ilosc_stara": 100,
 }
 
 EXAMPLE_DISCOUNT_MARGIN = {
-    "tkw": "80.0",
-    "cena_stara": "",
-    "marza_stara": "40.0",
-    "cena_nowa": "",
-    "marza_nowa": "20.0",
-    "ilosc_stara": "100",
+    "tkw": 80.0,
+    "cena_stara": 0.0,
+    "marza_stara": 40.0,
+    "cena_nowa": 0.0,
+    "marza_nowa": 20.0,
+    "ilosc_stara": 100,
 }
 
 EXAMPLE_QUICK = {
-    "tkw_m": "50.0",
-    "cena_m": "100.0",
-    "marza_m": "50.0",
+    "tkw_m": 50.0,
+    "cena_m": 100.0,
+    "marza_m": 50.0,
 }
 
 for k, v in {**INITIAL_DISCOUNT, **INITIAL_QUICK}.items():
@@ -167,7 +167,17 @@ def load_quick_example() -> None:
 
 def _entered(key: str) -> bool:
     """Return ``True`` if the user explicitly provided a value for ``key``."""
-    val = st.session_state.get(key, "")
+    val = st.session_state.get(key)
+    if val is None:
+        return False
+    init_discount = globals().get("INITIAL_DISCOUNT", {})
+    init_quick = globals().get("INITIAL_QUICK", {})
+    if key in init_discount:
+        default = init_discount[key]
+        return val != default
+    if key in init_quick:
+        default = init_quick[key]
+        return val != default
     return str(val).strip() != ""
 
 # ------------------ UI -------------------------------------
@@ -209,7 +219,7 @@ if st.session_state["selected_tab"] == "discount":
 
     col_a, col_or1, col_b = st.columns([1, 0.15, 1])
     with col_a:
-        tkw = _to_decimal(st.text_input(T["tkw"], key="tkw"), none_on_error=True)
+        tkw = st.number_input(T["tkw"], key="tkw", value=0.0)
         sub_a1, sub_a2, sub_a3 = st.columns([1,1,1])
         with sub_a2:
             st.button(
@@ -224,7 +234,7 @@ if st.session_state["selected_tab"] == "discount":
         )
         st.markdown(or_html, unsafe_allow_html=True)
     with col_b:
-        cena_stara = _to_decimal(st.text_input(T["price"], key="cena_stara"), none_on_error=True)
+        cena_stara = st.number_input(T["price"], key="cena_stara", value=0.0)
         sub_b1, sub_b2, sub_b3 = st.columns([1,1,1])
         with sub_b2:
             st.button(
@@ -236,7 +246,7 @@ if st.session_state["selected_tab"] == "discount":
 
     col_c, col_or2, col_d = st.columns([1, 0.15, 1])
     with col_c:
-        marza_stara = _to_decimal(st.text_input(T["old_margin"], key="marza_stara"), none_on_error=True)
+        marza_stara = st.number_input(T["old_margin"], key="marza_stara", value=0.0)
         sub_c1, sub_c2, sub_c3 = st.columns([1,1,1])
         with sub_c2:
             st.button(
@@ -248,7 +258,7 @@ if st.session_state["selected_tab"] == "discount":
     with col_or2:
         st.markdown(or_html, unsafe_allow_html=True)
     with col_d:
-        cena_nowa = _to_decimal(st.text_input(T["new_price"], key="cena_nowa"), none_on_error=True)
+        cena_nowa = st.number_input(T["new_price"], key="cena_nowa", value=0.0)
         sub_d1, sub_d2, sub_d3 = st.columns([1,1,1])
         with sub_d2:
             st.button(
@@ -260,7 +270,7 @@ if st.session_state["selected_tab"] == "discount":
 
     col_e, col_f = st.columns([1, 1])
     with col_e:
-        marza_nowa = _to_decimal(st.text_input(T["new_margin"], key="marza_nowa"), none_on_error=True)
+        marza_nowa = st.number_input(T["new_margin"], key="marza_nowa", value=0.0)
         sub_e1, sub_e2, sub_e3 = st.columns([1,1,1])
         with sub_e2:
             st.button(
@@ -270,7 +280,7 @@ if st.session_state["selected_tab"] == "discount":
                 args=("marza_nowa", INITIAL_DISCOUNT),
             )
     with col_f:
-        ilosc_stara = _to_int(st.text_input(T["qty"], key="ilosc_stara"), none_on_error=True)
+        ilosc_stara = st.number_input(T["qty"], key="ilosc_stara", value=0, step=1)
         sub_f1, sub_f2, sub_f3 = st.columns([1,1,1])
         with sub_f2:
             st.button(
@@ -367,7 +377,7 @@ elif st.session_state["selected_tab"] == "quick":
         [1, 0.13, 1, 0.13, 1]
     )
     with col_tkw:
-        tkw_m = _to_decimal(st.text_input(T["tkw"], key="tkw_m"), none_on_error=True)
+        tkw_m = st.number_input(T["tkw"], key="tkw_m", value=0.0)
         sub_q1, sub_q2, sub_q3 = st.columns([1,1,1])
         with sub_q2:
             st.button(
@@ -379,7 +389,7 @@ elif st.session_state["selected_tab"] == "quick":
     with col_or_a:
         st.markdown(or_html, unsafe_allow_html=True)
     with col_price:
-        cena_m = _to_decimal(st.text_input(T["price"], key="cena_m"), none_on_error=True)
+        cena_m = st.number_input(T["price"], key="cena_m", value=0.0)
         sub_q4, sub_q5, sub_q6 = st.columns([1,1,1])
         with sub_q5:
             st.button(
@@ -391,12 +401,11 @@ elif st.session_state["selected_tab"] == "quick":
     with col_or_b:
         st.markdown(or_html, unsafe_allow_html=True)
     with col_margin:
-        marza_m = _to_decimal(
-            st.text_input(
-                T["new_margin"].replace("Nowa ", "").replace("New ", "").capitalize(),
-                key="marza_m",
-            )
-        , none_on_error=True)
+        marza_m = st.number_input(
+            T["new_margin"].replace("Nowa ", "").replace("New ", "").capitalize(),
+            key="marza_m",
+            value=0.0,
+        )
         sub_q7, sub_q8, sub_q9 = st.columns([1,1,1])
         with sub_q8:
             st.button(
