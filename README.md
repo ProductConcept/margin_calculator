@@ -50,3 +50,22 @@ Calculate sale price from a desired margin:
 python cli.py cena 50 0.2
 ```
 
+## Docker
+
+The repository includes a `Dockerfile` so the application can be run in a
+container without installing Python locally.
+
+Build the image with:
+
+```bash
+docker build -t margin-calculator .
+```
+
+Then start the container:
+
+```bash
+docker run -p 8501:8501 margin-calculator
+```
+
+Once running, open `http://localhost:8501` in your browser to use the app.
+
