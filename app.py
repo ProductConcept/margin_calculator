@@ -174,9 +174,8 @@ def _clear_field(key: str, init_dict: dict) -> None:
 
 
 def _clear_field_cb(key: str, init_dict: dict) -> None:
-    """Callback wrapper that clears a field and reruns the app."""
+    """Callback wrapper that clears a field."""
     _clear_field(key, init_dict)
-    st.rerun()
 
 
 def clear_discount_all() -> None:
@@ -186,9 +185,8 @@ def clear_discount_all() -> None:
 
 
 def clear_discount_all_cb() -> None:
-    """Clear discount fields and rerun the app."""
+    """Clear discount fields."""
     clear_discount_all()
-    st.rerun()
 
 
 def load_discount_example() -> None:
@@ -201,9 +199,8 @@ def load_discount_example() -> None:
 
 
 def load_discount_example_cb() -> None:
-    """Load discount example values and rerun the app."""
+    """Load discount example values."""
     load_discount_example()
-    st.rerun()
 
 
 def clear_quick_all() -> None:
@@ -213,9 +210,8 @@ def clear_quick_all() -> None:
 
 
 def clear_quick_all_cb() -> None:
-    """Clear quick calculator fields and rerun the app."""
+    """Clear quick calculator fields."""
     clear_quick_all()
-    st.rerun()
 
 
 def load_quick_example() -> None:
@@ -225,9 +221,8 @@ def load_quick_example() -> None:
 
 
 def load_quick_example_cb() -> None:
-    """Load quick example values and rerun the app."""
+    """Load quick example values."""
     load_quick_example()
-    st.rerun()
 
 
 def _entered(key: str) -> bool:
