@@ -47,7 +47,7 @@ PL = {
     "res_profit_old": "📈 **Zysk przed:** {v:.2f}/szt",
     "res_profit_new": "📉 **Zysk po:** {v:.2f}/szt",
     "res_loss": "💰 **Strata łączna:** {v:.2f}",
-    "res_extra": "➕ **Dodatkowa sprzedaż:** {v} szt.",
+    "res_extra": "➕ Dodatkowa sprzedaż",
     "res_total": "📦 **Łącznie:** {v} szt.",
     "res_quick": "**TKW:** {tkw:.2f}  |  **Cena:** {price:.2f}  |  **Marża:** {margin:.2f} %",
     "author": "Autor programu: Marcin Czerwiński  |  Product Concept",
@@ -80,7 +80,7 @@ EN = {
     "res_profit_old": "📈 **Profit before:** {v:.2f}/pc",
     "res_profit_new": "📉 **Profit after:** {v:.2f}/pc",
     "res_loss": "💰 **Total loss:** {v:.2f}",
-    "res_extra": "➕ **Extra sales needed:** {v} pcs",
+    "res_extra": "➕ Extra sales needed",
     "res_total": "📦 **Total:** {v} pcs",
     "res_quick": "**Production cost:** {tkw:.2f}  |  **Price:** {price:.2f}  |  **Margin:** {margin:.2f} %",
     "author": "Program author: Marcin Czerwiński  |  Product Concept",
@@ -362,14 +362,14 @@ if st.session_state["selected_tab"] == "discount":
             ilosc_dodatkowa = round(strata / zysk_nowy)
             ilosc_nowych = ilosc_stara + ilosc_dodatkowa
 
+            st.metric("➕ Dodatkowa sprzedaż", f"{ilosc_dodatkowa} szt.")
+
             st.success(
                 T["res_profit_old"].format(v=zysk_stary)
                 + "  \n"
                 + T["res_profit_new"].format(v=zysk_nowy)
                 + "  \n"
                 + T["res_loss"].format(v=strata)
-                + "  \n"
-                + T["res_extra"].format(v=ilosc_dodatkowa)
                 + "  \n"
                 + T["res_total"].format(v=ilosc_nowych)
             )
