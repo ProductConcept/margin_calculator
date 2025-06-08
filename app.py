@@ -213,8 +213,9 @@ with tab_obnizka:
             st.stop()
 
         if _entered("marza_stara"):
-            cena_stara = float(
-                cena_z_marzy(Decimal(tkw), Decimal(marza_stara) / Decimal(100))
+            cena_stara = cena_z_marzy(
+                tkw,
+                marza_stara / Decimal(100),
             )
         elif not _entered("cena_stara"):
             st.error(T["err_pair_old"])
@@ -225,8 +226,9 @@ with tab_obnizka:
             ) * 100
 
         if _entered("marza_nowa"):
-            cena_nowa = float(
-                cena_z_marzy(Decimal(tkw), Decimal(marza_nowa) / Decimal(100))
+            cena_nowa = cena_z_marzy(
+                tkw,
+                marza_nowa / Decimal(100),
             )
         elif not _entered("cena_nowa"):
             st.error(T["err_pair_new"])
