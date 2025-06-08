@@ -2,7 +2,10 @@
 
 from decimal import Decimal
 
+import streamlit as st
 
+
+@st.cache_data
 def licz_marze_z_ceny(tkw: Decimal, cena: Decimal) -> Decimal:
     """Return the margin as a fraction of ``cena``.
 
@@ -27,6 +30,7 @@ def licz_marze_z_ceny(tkw: Decimal, cena: Decimal) -> Decimal:
     return (cena - tkw) / cena if cena else Decimal("0")
 
 
+@st.cache_data
 def cena_z_marzy(tkw: Decimal, marza: Decimal) -> Decimal:
     """Return the sale price required to achieve ``marza``.
 

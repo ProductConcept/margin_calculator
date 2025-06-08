@@ -1,9 +1,10 @@
 """Streamlit application for interactive margin calculations."""
 
 from decimal import Decimal
+
 import streamlit as st
 
-from calculator import licz_marze_z_ceny, cena_z_marzy
+from calculator import cena_z_marzy, licz_marze_z_ceny
 
 # ------------------ Konfiguracja / Config ------------------
 st.set_page_config(
@@ -49,7 +50,7 @@ PL = {
     "res_extra": "➕ **Dodatkowa sprzedaż:** {v} szt.",
     "res_total": "📦 **Łącznie:** {v} szt.",
     "res_quick": "**TKW:** {tkw:.2f}  |  **Cena:** {price:.2f}  |  **Marża:** {margin:.2f} %",
-    "author": "Autor programu: Marcin Czerwiński  |  Product Concept"
+    "author": "Autor programu: Marcin Czerwiński  |  Product Concept",
 }
 EN = {
     "title": "💰 Margin Calculator",
@@ -82,7 +83,7 @@ EN = {
     "res_extra": "➕ **Extra sales needed:** {v} pcs",
     "res_total": "📦 **Total:** {v} pcs",
     "res_quick": "**Production cost:** {tkw:.2f}  |  **Price:** {price:.2f}  |  **Margin:** {margin:.2f} %",
-    "author": "Program author: Marcin Czerwiński  |  Product Concept"
+    "author": "Program author: Marcin Czerwiński  |  Product Concept",
 }
 
 lang = st.sidebar.selectbox("Language / Język", ("Polski", "English"))
@@ -180,6 +181,7 @@ def _entered(key: str) -> bool:
         return val != default
     return str(val).strip() != ""
 
+
 # ------------------ UI -------------------------------------
 st.title(T["title"])
 
@@ -217,11 +219,11 @@ st.radio(
 if st.session_state["selected_tab"] == "discount":
     st.header(T["discount_header"])
     with st.form("discount_form"):
-    
+
         col_a, col_or1, col_b = st.columns([1, 0.15, 1])
         with col_a:
             tkw = st.number_input(T["tkw"], key="tkw", value=0.0)
-            sub_a1, sub_a2, sub_a3 = st.columns([1,1,1])
+            sub_a1, sub_a2, sub_a3 = st.columns([1, 1, 1])
             with sub_a2:
                 st.form_submit_button(
                     T["btn_clear"],
@@ -230,13 +232,11 @@ if st.session_state["selected_tab"] == "discount":
                     args=("tkw", INITIAL_DISCOUNT),
                 )
         with col_or1:
-            or_html = (
-                f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>"
-            )
+            or_html = f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>"
             st.markdown(or_html, unsafe_allow_html=True)
         with col_b:
             cena_stara = st.number_input(T["price"], key="cena_stara", value=0.0)
-            sub_b1, sub_b2, sub_b3 = st.columns([1,1,1])
+            sub_b1, sub_b2, sub_b3 = st.columns([1, 1, 1])
             with sub_b2:
                 st.form_submit_button(
                     T["btn_clear"],
@@ -244,11 +244,11 @@ if st.session_state["selected_tab"] == "discount":
                     on_click=_clear_field,
                     args=("cena_stara", INITIAL_DISCOUNT),
                 )
-    
+
         col_c, col_or2, col_d = st.columns([1, 0.15, 1])
         with col_c:
             marza_stara = st.number_input(T["old_margin"], key="marza_stara", value=0.0)
-            sub_c1, sub_c2, sub_c3 = st.columns([1,1,1])
+            sub_c1, sub_c2, sub_c3 = st.columns([1, 1, 1])
             with sub_c2:
                 st.form_submit_button(
                     T["btn_clear"],
@@ -260,7 +260,7 @@ if st.session_state["selected_tab"] == "discount":
             st.markdown(or_html, unsafe_allow_html=True)
         with col_d:
             cena_nowa = st.number_input(T["new_price"], key="cena_nowa", value=0.0)
-            sub_d1, sub_d2, sub_d3 = st.columns([1,1,1])
+            sub_d1, sub_d2, sub_d3 = st.columns([1, 1, 1])
             with sub_d2:
                 st.form_submit_button(
                     T["btn_clear"],
@@ -268,11 +268,11 @@ if st.session_state["selected_tab"] == "discount":
                     on_click=_clear_field,
                     args=("cena_nowa", INITIAL_DISCOUNT),
                 )
-    
+
         col_e, col_f = st.columns([1, 1])
         with col_e:
             marza_nowa = st.number_input(T["new_margin"], key="marza_nowa", value=0.0)
-            sub_e1, sub_e2, sub_e3 = st.columns([1,1,1])
+            sub_e1, sub_e2, sub_e3 = st.columns([1, 1, 1])
             with sub_e2:
                 st.form_submit_button(
                     T["btn_clear"],
@@ -282,7 +282,7 @@ if st.session_state["selected_tab"] == "discount":
                 )
         with col_f:
             ilosc_stara = st.number_input(T["qty"], key="ilosc_stara", value=0, step=1)
-            sub_f1, sub_f2, sub_f3 = st.columns([1,1,1])
+            sub_f1, sub_f2, sub_f3 = st.columns([1, 1, 1])
             with sub_f2:
                 st.form_submit_button(
                     T["btn_clear"],
@@ -290,7 +290,7 @@ if st.session_state["selected_tab"] == "discount":
                     on_click=_clear_field,
                     args=("ilosc_stara", INITIAL_DISCOUNT),
                 )
-    
+
         col_actions_d1, col_actions_d2 = st.columns([1, 1])
         with col_actions_d1:
             st.form_submit_button(
@@ -304,84 +304,92 @@ if st.session_state["selected_tab"] == "discount":
                 key="example_discount",
                 on_click=load_discount_example,
             )
-    
-        submitted_discount = st.form_submit_button(T["btn_discount"], key="discount_btn")
-    if submitted_discount:
-        if None in (tkw, cena_stara, marza_stara, cena_nowa, marza_nowa, ilosc_stara):
-            st.error("Invalid input")
-            st.stop()
-    
-        if not _entered("tkw") or not _entered("ilosc_stara"):
-            st.error(T["err_fill"])
-            st.stop()
 
-        if _entered("marza_stara"):
-            cena_stara = cena_z_marzy(
-                tkw,
-                marza_stara / Decimal(100),
-            ).quantize(Decimal("0.01"))
-        elif not _entered("cena_stara"):
-            st.error(T["err_pair_old"])
-            st.stop()
-        else:
-            marza_stara = float(
-                licz_marze_z_ceny(Decimal(tkw), Decimal(cena_stara))
-            ) * 100
-
-        if _entered("marza_nowa"):
-            cena_nowa = cena_z_marzy(
-                tkw,
-                marza_nowa / Decimal(100),
-            ).quantize(Decimal("0.01"))
-        elif not _entered("cena_nowa"):
-            st.error(T["err_pair_new"])
-            st.stop()
-        else:
-            marza_nowa = float(
-                licz_marze_z_ceny(Decimal(tkw), Decimal(cena_nowa))
-            ) * 100
-
-        zysk_stary = cena_stara - tkw
-        zysk_nowy = cena_nowa - tkw
-        strata = (zysk_stary - zysk_nowy) * ilosc_stara
-
-        if zysk_nowy <= 0:
-            st.error(T["err_loss"])
-            st.stop()
-
-        ilosc_dodatkowa = round(strata / zysk_nowy)
-        ilosc_nowych = ilosc_stara + ilosc_dodatkowa
-
-        st.success(
-            T["res_profit_old"].format(v=zysk_stary)
-            + "  \n"
-            + T["res_profit_new"].format(v=zysk_nowy)
-            + "  \n"
-            + T["res_loss"].format(v=strata)
-            + "  \n"
-            + T["res_extra"].format(v=ilosc_dodatkowa)
-            + "  \n"
-            + T["res_total"].format(v=ilosc_nowych)
+        submitted_discount = st.form_submit_button(
+            T["btn_discount"], key="discount_btn"
         )
+    if submitted_discount:
+        with st.spinner("Obliczanie..."):
+            if None in (
+                tkw,
+                cena_stara,
+                marza_stara,
+                cena_nowa,
+                marza_nowa,
+                ilosc_stara,
+            ):
+                st.error("Invalid input")
+                st.stop()
+
+            if not _entered("tkw") or not _entered("ilosc_stara"):
+                st.error(T["err_fill"])
+                st.stop()
+
+            if _entered("marza_stara"):
+                cena_stara = cena_z_marzy(
+                    tkw,
+                    marza_stara / Decimal(100),
+                ).quantize(Decimal("0.01"))
+            elif not _entered("cena_stara"):
+                st.error(T["err_pair_old"])
+                st.stop()
+            else:
+                marza_stara = (
+                    float(licz_marze_z_ceny(Decimal(tkw), Decimal(cena_stara))) * 100
+                )
+
+            if _entered("marza_nowa"):
+                cena_nowa = cena_z_marzy(
+                    tkw,
+                    marza_nowa / Decimal(100),
+                ).quantize(Decimal("0.01"))
+            elif not _entered("cena_nowa"):
+                st.error(T["err_pair_new"])
+                st.stop()
+            else:
+                marza_nowa = (
+                    float(licz_marze_z_ceny(Decimal(tkw), Decimal(cena_nowa))) * 100
+                )
+
+            zysk_stary = cena_stara - tkw
+            zysk_nowy = cena_nowa - tkw
+            strata = (zysk_stary - zysk_nowy) * ilosc_stara
+
+            if zysk_nowy <= 0:
+                st.error(T["err_loss"])
+                st.stop()
+
+            ilosc_dodatkowa = round(strata / zysk_nowy)
+            ilosc_nowych = ilosc_stara + ilosc_dodatkowa
+
+            st.success(
+                T["res_profit_old"].format(v=zysk_stary)
+                + "  \n"
+                + T["res_profit_new"].format(v=zysk_nowy)
+                + "  \n"
+                + T["res_loss"].format(v=strata)
+                + "  \n"
+                + T["res_extra"].format(v=ilosc_dodatkowa)
+                + "  \n"
+                + T["res_total"].format(v=ilosc_nowych)
+            )
 
 # ========= Zakładka 2: szybki kalkulator ====================
 elif st.session_state["selected_tab"] == "quick":
     st.header(T["quick_header"])
     with st.form("quick_form"):
-        or_html = (
-            f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>"
-        )
+        or_html = f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>"
         st.markdown(
             f"<div style='text-align:center;font-size:0.75em;color:gray'>{T['quick_sub']}</div>",
             unsafe_allow_html=True,
         )
-    
+
         col_tkw, col_or_a, col_price, col_or_b, col_margin = st.columns(
             [1, 0.13, 1, 0.13, 1]
         )
         with col_tkw:
             tkw_m = st.number_input(T["tkw"], key="tkw_m", value=0.0)
-            sub_q1, sub_q2, sub_q3 = st.columns([1,1,1])
+            sub_q1, sub_q2, sub_q3 = st.columns([1, 1, 1])
             with sub_q2:
                 st.form_submit_button(
                     T["btn_clear"],
@@ -393,7 +401,7 @@ elif st.session_state["selected_tab"] == "quick":
             st.markdown(or_html, unsafe_allow_html=True)
         with col_price:
             cena_m = st.number_input(T["price"], key="cena_m", value=0.0)
-            sub_q4, sub_q5, sub_q6 = st.columns([1,1,1])
+            sub_q4, sub_q5, sub_q6 = st.columns([1, 1, 1])
             with sub_q5:
                 st.form_submit_button(
                     T["btn_clear"],
@@ -409,7 +417,7 @@ elif st.session_state["selected_tab"] == "quick":
                 key="marza_m",
                 value=0.0,
             )
-            sub_q7, sub_q8, sub_q9 = st.columns([1,1,1])
+            sub_q7, sub_q8, sub_q9 = st.columns([1, 1, 1])
             with sub_q8:
                 st.form_submit_button(
                     T["btn_clear"],
@@ -417,7 +425,7 @@ elif st.session_state["selected_tab"] == "quick":
                     on_click=_clear_field,
                     args=("marza_m", INITIAL_QUICK),
                 )
-    
+
         col_actions_q1, col_actions_q2 = st.columns([1, 1])
         with col_actions_q1:
             st.form_submit_button(
@@ -431,34 +439,36 @@ elif st.session_state["selected_tab"] == "quick":
                 key="example_quick",
                 on_click=load_quick_example,
             )
-    
+
         submitted_quick = st.form_submit_button(T["btn_quick"], key="quick_btn")
     if submitted_quick:
-        if None in (tkw_m, cena_m, marza_m):
-            st.error("Invalid input")
-            st.stop()
+        with st.spinner("Obliczanie..."):
+            if None in (tkw_m, cena_m, marza_m):
+                st.error("Invalid input")
+                st.stop()
 
-        pola = [_entered("tkw_m"), _entered("cena_m"), _entered("marza_m")]
-        if sum(pola) < 2:
-            st.error(T["err_two_values"])
-            st.stop()
+            pola = [_entered("tkw_m"), _entered("cena_m"), _entered("marza_m")]
+            if sum(pola) < 2:
+                st.error(T["err_two_values"])
+                st.stop()
 
-        if _entered("cena_m") and _entered("tkw_m"):
-            marza_m = float(
-                licz_marze_z_ceny(Decimal(tkw_m), Decimal(cena_m))
-            ) * 100
-        elif _entered("tkw_m") and _entered("marza_m"):
-            cena_m = float(
-                cena_z_marzy(Decimal(tkw_m), Decimal(marza_m) / Decimal(100))
-                .quantize(Decimal("0.01"))
-            )
-        elif _entered("cena_m") and _entered("marza_m"):
-            tkw_m = cena_m * (1 - marza_m / 100)
+            if _entered("cena_m") and _entered("tkw_m"):
+                marza_m = (
+                    float(licz_marze_z_ceny(Decimal(tkw_m), Decimal(cena_m))) * 100
+                )
+            elif _entered("tkw_m") and _entered("marza_m"):
+                cena_m = float(
+                    cena_z_marzy(
+                        Decimal(tkw_m), Decimal(marza_m) / Decimal(100)
+                    ).quantize(Decimal("0.01"))
+                )
+            elif _entered("cena_m") and _entered("marza_m"):
+                tkw_m = cena_m * (1 - marza_m / 100)
 
-        st.success(
-            T["res_quick"].format(tkw=tkw_m, price=cena_m, margin=marza_m)
-        )
+            st.success(T["res_quick"].format(tkw=tkw_m, price=cena_m, margin=marza_m))
 
 # ====== Informacja o autorze ======
-author_html = f"<div style='margin-top:2em;text-align:center;color:#999'>{T['author']}</div>"
+author_html = (
+    f"<div style='margin-top:2em;text-align:center;color:#999'>{T['author']}</div>"
+)
 st.markdown(author_html, unsafe_allow_html=True)
