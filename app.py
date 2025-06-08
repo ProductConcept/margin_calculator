@@ -247,7 +247,7 @@ with tab_obnizka:
             cena_stara = cena_z_marzy(
                 tkw,
                 marza_stara / Decimal(100),
-            )
+            ).quantize(Decimal("0.01"))
         elif not _entered("cena_stara"):
             st.error(T["err_pair_old"])
             st.stop()
@@ -260,7 +260,7 @@ with tab_obnizka:
             cena_nowa = cena_z_marzy(
                 tkw,
                 marza_nowa / Decimal(100),
-            )
+            ).quantize(Decimal("0.01"))
         elif not _entered("cena_nowa"):
             st.error(T["err_pair_new"])
             st.stop()
@@ -348,6 +348,7 @@ with tab_szybki:
         elif _entered("tkw_m") and _entered("marza_m"):
             cena_m = float(
                 cena_z_marzy(Decimal(tkw_m), Decimal(marza_m) / Decimal(100))
+                .quantize(Decimal("0.01"))
             )
         elif _entered("cena_m") and _entered("marza_m"):
             tkw_m = cena_m * (1 - marza_m / 100)

@@ -50,6 +50,18 @@ class TestMarginFunctions(unittest.TestCase):
             Decimal('10')
         )
 
+    def test_total_loss_quantized(self):
+        tkw = Decimal('80')
+        marza_stara = Decimal('0.4')
+        marza_nowa = Decimal('0.2')
+        qty = 100
+        cena_stara = cena_z_marzy(tkw, marza_stara).quantize(Decimal('0.01'))
+        cena_nowa = cena_z_marzy(tkw, marza_nowa).quantize(Decimal('0.01'))
+        zysk_stary = cena_stara - tkw
+        zysk_nowy = cena_nowa - tkw
+        strata = (zysk_stary - zysk_nowy) * qty
+        self.assertEqual(strata, Decimal('3333'))
+
 
 if __name__ == '__main__':
     unittest.main()
