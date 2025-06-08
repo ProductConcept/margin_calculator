@@ -212,52 +212,87 @@ if st.session_state["selected_tab"] == "discount":
         tkw = _to_decimal(st.text_input(T["tkw"], key="tkw"), none_on_error=True)
         sub_a1, sub_a2, sub_a3 = st.columns([1,1,1])
         with sub_a2:
-            st.button(T["btn_clear"], key="clr_tkw", on_click=_clear_field, args=("tkw", INITIAL_DISCOUNT))
+            st.button(
+                T["btn_clear"],
+                key="clr_tkw",
+                on_click=_clear_field,
+                args=("tkw", INITIAL_DISCOUNT),
+            )
     with col_or1:
-        st.markdown(
-            f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>",
-            unsafe_allow_html=True,
+        or_html = (
+            f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>"
         )
+        st.markdown(or_html, unsafe_allow_html=True)
     with col_b:
         cena_stara = _to_decimal(st.text_input(T["price"], key="cena_stara"), none_on_error=True)
         sub_b1, sub_b2, sub_b3 = st.columns([1,1,1])
         with sub_b2:
-            st.button(T["btn_clear"], key="clr_cena_stara", on_click=_clear_field, args=("cena_stara", INITIAL_DISCOUNT))
+            st.button(
+                T["btn_clear"],
+                key="clr_cena_stara",
+                on_click=_clear_field,
+                args=("cena_stara", INITIAL_DISCOUNT),
+            )
 
     col_c, col_or2, col_d = st.columns([1, 0.15, 1])
     with col_c:
         marza_stara = _to_decimal(st.text_input(T["old_margin"], key="marza_stara"), none_on_error=True)
         sub_c1, sub_c2, sub_c3 = st.columns([1,1,1])
         with sub_c2:
-            st.button(T["btn_clear"], key="clr_marza_stara", on_click=_clear_field, args=("marza_stara", INITIAL_DISCOUNT))
+            st.button(
+                T["btn_clear"],
+                key="clr_marza_stara",
+                on_click=_clear_field,
+                args=("marza_stara", INITIAL_DISCOUNT),
+            )
     with col_or2:
-        st.markdown(
-            f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>",
-            unsafe_allow_html=True,
-        )
+        st.markdown(or_html, unsafe_allow_html=True)
     with col_d:
         cena_nowa = _to_decimal(st.text_input(T["new_price"], key="cena_nowa"), none_on_error=True)
         sub_d1, sub_d2, sub_d3 = st.columns([1,1,1])
         with sub_d2:
-            st.button(T["btn_clear"], key="clr_cena_nowa", on_click=_clear_field, args=("cena_nowa", INITIAL_DISCOUNT))
+            st.button(
+                T["btn_clear"],
+                key="clr_cena_nowa",
+                on_click=_clear_field,
+                args=("cena_nowa", INITIAL_DISCOUNT),
+            )
 
     col_e, col_f = st.columns([1, 1])
     with col_e:
         marza_nowa = _to_decimal(st.text_input(T["new_margin"], key="marza_nowa"), none_on_error=True)
         sub_e1, sub_e2, sub_e3 = st.columns([1,1,1])
         with sub_e2:
-            st.button(T["btn_clear"], key="clr_marza_nowa", on_click=_clear_field, args=("marza_nowa", INITIAL_DISCOUNT))
+            st.button(
+                T["btn_clear"],
+                key="clr_marza_nowa",
+                on_click=_clear_field,
+                args=("marza_nowa", INITIAL_DISCOUNT),
+            )
     with col_f:
         ilosc_stara = _to_int(st.text_input(T["qty"], key="ilosc_stara"), none_on_error=True)
         sub_f1, sub_f2, sub_f3 = st.columns([1,1,1])
         with sub_f2:
-            st.button(T["btn_clear"], key="clr_ilosc_stara", on_click=_clear_field, args=("ilosc_stara", INITIAL_DISCOUNT))
+            st.button(
+                T["btn_clear"],
+                key="clr_ilosc_stara",
+                on_click=_clear_field,
+                args=("ilosc_stara", INITIAL_DISCOUNT),
+            )
 
     col_actions_d1, col_actions_d2 = st.columns([1, 1])
     with col_actions_d1:
-        st.button(T["btn_clear_all"], key="clear_all_discount", on_click=clear_discount_all)
+        st.button(
+            T["btn_clear_all"],
+            key="clear_all_discount",
+            on_click=clear_discount_all,
+        )
     with col_actions_d2:
-        st.button(T["btn_example"], key="example_discount", on_click=load_discount_example)
+        st.button(
+            T["btn_example"],
+            key="example_discount",
+            on_click=load_discount_example,
+        )
 
     if st.button(T["btn_discount"], key="discount_btn"):
         if None in (tkw, cena_stara, marza_stara, cena_nowa, marza_nowa, ilosc_stara):
@@ -320,31 +355,41 @@ if st.session_state["selected_tab"] == "discount":
 # ========= Zakładka 2: szybki kalkulator ====================
 elif st.session_state["selected_tab"] == "quick":
     st.header(T["quick_header"])
+    or_html = (
+        f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>"
+    )
     st.markdown(
         f"<div style='text-align:center;font-size:0.75em;color:gray'>{T['quick_sub']}</div>",
-        unsafe_allow_html=True)
+        unsafe_allow_html=True,
+    )
 
-    col_tkw, col_or_a, col_price, col_or_b, col_margin = st.columns([1, 0.13, 1, 0.13, 1])
+    col_tkw, col_or_a, col_price, col_or_b, col_margin = st.columns(
+        [1, 0.13, 1, 0.13, 1]
+    )
     with col_tkw:
         tkw_m = _to_decimal(st.text_input(T["tkw"], key="tkw_m"), none_on_error=True)
         sub_q1, sub_q2, sub_q3 = st.columns([1,1,1])
         with sub_q2:
-            st.button(T["btn_clear"], key="clr_tkw_m", on_click=_clear_field, args=("tkw_m", INITIAL_QUICK))
+            st.button(
+                T["btn_clear"],
+                key="clr_tkw_m",
+                on_click=_clear_field,
+                args=("tkw_m", INITIAL_QUICK),
+            )
     with col_or_a:
-        st.markdown(
-            f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>",
-            unsafe_allow_html=True,
-        )
+        st.markdown(or_html, unsafe_allow_html=True)
     with col_price:
         cena_m = _to_decimal(st.text_input(T["price"], key="cena_m"), none_on_error=True)
         sub_q4, sub_q5, sub_q6 = st.columns([1,1,1])
         with sub_q5:
-            st.button(T["btn_clear"], key="clr_cena_m", on_click=_clear_field, args=("cena_m", INITIAL_QUICK))
+            st.button(
+                T["btn_clear"],
+                key="clr_cena_m",
+                on_click=_clear_field,
+                args=("cena_m", INITIAL_QUICK),
+            )
     with col_or_b:
-        st.markdown(
-            f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>",
-            unsafe_allow_html=True,
-        )
+        st.markdown(or_html, unsafe_allow_html=True)
     with col_margin:
         marza_m = _to_decimal(
             st.text_input(
@@ -354,13 +399,26 @@ elif st.session_state["selected_tab"] == "quick":
         , none_on_error=True)
         sub_q7, sub_q8, sub_q9 = st.columns([1,1,1])
         with sub_q8:
-            st.button(T["btn_clear"], key="clr_marza_m", on_click=_clear_field, args=("marza_m", INITIAL_QUICK))
+            st.button(
+                T["btn_clear"],
+                key="clr_marza_m",
+                on_click=_clear_field,
+                args=("marza_m", INITIAL_QUICK),
+            )
 
     col_actions_q1, col_actions_q2 = st.columns([1, 1])
     with col_actions_q1:
-        st.button(T["btn_clear_all"], key="clear_all_quick", on_click=clear_quick_all)
+        st.button(
+            T["btn_clear_all"],
+            key="clear_all_quick",
+            on_click=clear_quick_all,
+        )
     with col_actions_q2:
-        st.button(T["btn_example"], key="example_quick", on_click=load_quick_example)
+        st.button(
+            T["btn_example"],
+            key="example_quick",
+            on_click=load_quick_example,
+        )
 
     if st.button(T["btn_quick"], key="quick_btn"):
         if None in (tkw_m, cena_m, marza_m):
@@ -389,4 +447,5 @@ elif st.session_state["selected_tab"] == "quick":
         )
 
 # ====== Informacja o autorze ======
-st.markdown(f"<div style='margin-top:2em;text-align:center;color:#999'>{T['author']}</div>", unsafe_allow_html=True)
+author_html = f"<div style='margin-top:2em;text-align:center;color:#999'>{T['author']}</div>"
+st.markdown(author_html, unsafe_allow_html=True)
