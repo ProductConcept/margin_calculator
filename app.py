@@ -139,10 +139,22 @@ def _clear_field(key: str, init_dict: dict) -> None:
     st.session_state[key] = init_dict[key]
 
 
+def _clear_field_cb(key: str, init_dict: dict) -> None:
+    """Callback wrapper that clears a field and reruns the app."""
+    _clear_field(key, init_dict)
+    st.rerun()
+
+
 def clear_discount_all() -> None:
     """Reset all discount form fields to their default values."""
     for k in INITIAL_DISCOUNT:
         st.session_state[k] = INITIAL_DISCOUNT[k]
+
+
+def clear_discount_all_cb() -> None:
+    """Clear discount fields and rerun the app."""
+    clear_discount_all()
+    st.rerun()
 
 
 def load_discount_example() -> None:
@@ -154,16 +166,34 @@ def load_discount_example() -> None:
     st.session_state["example_toggle"] = 1 - toggle
 
 
+def load_discount_example_cb() -> None:
+    """Load discount example values and rerun the app."""
+    load_discount_example()
+    st.rerun()
+
+
 def clear_quick_all() -> None:
     """Reset all quick calculator fields to their default values."""
     for k in INITIAL_QUICK:
         st.session_state[k] = INITIAL_QUICK[k]
 
 
+def clear_quick_all_cb() -> None:
+    """Clear quick calculator fields and rerun the app."""
+    clear_quick_all()
+    st.rerun()
+
+
 def load_quick_example() -> None:
     """Load example values for the quick calculator."""
     for k in INITIAL_QUICK:
         st.session_state[k] = EXAMPLE_QUICK[k]
+
+
+def load_quick_example_cb() -> None:
+    """Load quick example values and rerun the app."""
+    load_quick_example()
+    st.rerun()
 
 
 def _entered(key: str) -> bool:
@@ -230,7 +260,7 @@ if st.session_state["selected_tab"] == "discount":
                 st.form_submit_button(
                     T["btn_clear"],
                     key="clear_tkw",
-                    on_click=_clear_field,
+                    on_click=_clear_field_cb,
                     args=("tkw", INITIAL_DISCOUNT),
                 )
         with col_or1:
@@ -245,7 +275,7 @@ if st.session_state["selected_tab"] == "discount":
                 st.form_submit_button(
                     T["btn_clear"],
                     key="clear_cena_stara",
-                    on_click=_clear_field,
+                    on_click=_clear_field_cb,
                     args=("cena_stara", INITIAL_DISCOUNT),
                 )
 
@@ -259,7 +289,7 @@ if st.session_state["selected_tab"] == "discount":
                 st.form_submit_button(
                     T["btn_clear"],
                     key="clear_marza_stara",
-                    on_click=_clear_field,
+                    on_click=_clear_field_cb,
                     args=("marza_stara", INITIAL_DISCOUNT),
                 )
         with col_or2:
@@ -273,7 +303,7 @@ if st.session_state["selected_tab"] == "discount":
                 st.form_submit_button(
                     T["btn_clear"],
                     key="clear_cena_nowa",
-                    on_click=_clear_field,
+                    on_click=_clear_field_cb,
                     args=("cena_nowa", INITIAL_DISCOUNT),
                 )
 
@@ -287,7 +317,7 @@ if st.session_state["selected_tab"] == "discount":
                 st.form_submit_button(
                     T["btn_clear"],
                     key="clear_marza_nowa",
-                    on_click=_clear_field,
+                    on_click=_clear_field_cb,
                     args=("marza_nowa", INITIAL_DISCOUNT),
                 )
         with col_f:
@@ -299,7 +329,7 @@ if st.session_state["selected_tab"] == "discount":
                 st.form_submit_button(
                     T["btn_clear"],
                     key="clear_ilosc_stara",
-                    on_click=_clear_field,
+                    on_click=_clear_field_cb,
                     args=("ilosc_stara", INITIAL_DISCOUNT),
                 )
 
@@ -308,13 +338,13 @@ if st.session_state["selected_tab"] == "discount":
             st.form_submit_button(
                 T["btn_clear_all"],
                 key="clear_discount_all",
-                on_click=clear_discount_all,
+                on_click=clear_discount_all_cb,
             )
         with col_actions_d2:
             st.form_submit_button(
                 T["btn_example"],
                 key="load_discount_example",
-                on_click=load_discount_example,
+                on_click=load_discount_example_cb,
             )
 
         submitted_discount = st.form_submit_button(
@@ -405,7 +435,7 @@ elif st.session_state["selected_tab"] == "quick":
                 st.form_submit_button(
                     T["btn_clear"],
                     key="clear_tkw_m",
-                    on_click=_clear_field,
+                    on_click=_clear_field_cb,
                     args=("tkw_m", INITIAL_QUICK),
                 )
         with col_or_a:
@@ -419,7 +449,7 @@ elif st.session_state["selected_tab"] == "quick":
                 st.form_submit_button(
                     T["btn_clear"],
                     key="clear_cena_m",
-                    on_click=_clear_field,
+                    on_click=_clear_field_cb,
                     args=("cena_m", INITIAL_QUICK),
                 )
         with col_or_b:
@@ -439,7 +469,7 @@ elif st.session_state["selected_tab"] == "quick":
                 st.form_submit_button(
                     T["btn_clear"],
                     key="clear_marza_m",
-                    on_click=_clear_field,
+                    on_click=_clear_field_cb,
                     args=("marza_m", INITIAL_QUICK),
                 )
 
@@ -448,13 +478,13 @@ elif st.session_state["selected_tab"] == "quick":
             st.form_submit_button(
                 T["btn_clear_all"],
                 key="clear_quick_all",
-                on_click=clear_quick_all,
+                on_click=clear_quick_all_cb,
             )
         with col_actions_q2:
             st.form_submit_button(
                 T["btn_example"],
                 key="load_quick_example",
-                on_click=load_quick_example,
+                on_click=load_quick_example_cb,
             )
 
         submitted_quick = st.form_submit_button(
