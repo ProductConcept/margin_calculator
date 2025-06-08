@@ -229,6 +229,7 @@ if st.session_state["selected_tab"] == "discount":
             with sub_a2:
                 st.form_submit_button(
                     T["btn_clear"],
+                    key="clear_tkw",
                     on_click=_clear_field,
                     args=("tkw", INITIAL_DISCOUNT),
                 )
@@ -243,6 +244,7 @@ if st.session_state["selected_tab"] == "discount":
             with sub_b2:
                 st.form_submit_button(
                     T["btn_clear"],
+                    key="clear_cena_stara",
                     on_click=_clear_field,
                     args=("cena_stara", INITIAL_DISCOUNT),
                 )
@@ -256,6 +258,7 @@ if st.session_state["selected_tab"] == "discount":
             with sub_c2:
                 st.form_submit_button(
                     T["btn_clear"],
+                    key="clear_marza_stara",
                     on_click=_clear_field,
                     args=("marza_stara", INITIAL_DISCOUNT),
                 )
@@ -269,6 +272,7 @@ if st.session_state["selected_tab"] == "discount":
             with sub_d2:
                 st.form_submit_button(
                     T["btn_clear"],
+                    key="clear_cena_nowa",
                     on_click=_clear_field,
                     args=("cena_nowa", INITIAL_DISCOUNT),
                 )
@@ -282,6 +286,7 @@ if st.session_state["selected_tab"] == "discount":
             with sub_e2:
                 st.form_submit_button(
                     T["btn_clear"],
+                    key="clear_marza_nowa",
                     on_click=_clear_field,
                     args=("marza_nowa", INITIAL_DISCOUNT),
                 )
@@ -293,6 +298,7 @@ if st.session_state["selected_tab"] == "discount":
             with sub_f2:
                 st.form_submit_button(
                     T["btn_clear"],
+                    key="clear_ilosc_stara",
                     on_click=_clear_field,
                     args=("ilosc_stara", INITIAL_DISCOUNT),
                 )
@@ -301,16 +307,19 @@ if st.session_state["selected_tab"] == "discount":
         with col_actions_d1:
             st.form_submit_button(
                 T["btn_clear_all"],
+                key="clear_discount_all",
                 on_click=clear_discount_all,
             )
         with col_actions_d2:
             st.form_submit_button(
                 T["btn_example"],
+                key="load_discount_example",
                 on_click=load_discount_example,
             )
 
         submitted_discount = st.form_submit_button(
-            T["btn_discount"]
+            T["btn_discount"],
+            key="submit_discount",
         )
     if submitted_discount:
         with st.spinner("Obliczanie..."):
@@ -395,6 +404,7 @@ elif st.session_state["selected_tab"] == "quick":
             with sub_q2:
                 st.form_submit_button(
                     T["btn_clear"],
+                    key="clear_tkw_m",
                     on_click=_clear_field,
                     args=("tkw_m", INITIAL_QUICK),
                 )
@@ -408,6 +418,7 @@ elif st.session_state["selected_tab"] == "quick":
             with sub_q5:
                 st.form_submit_button(
                     T["btn_clear"],
+                    key="clear_cena_m",
                     on_click=_clear_field,
                     args=("cena_m", INITIAL_QUICK),
                 )
@@ -427,6 +438,7 @@ elif st.session_state["selected_tab"] == "quick":
             with sub_q8:
                 st.form_submit_button(
                     T["btn_clear"],
+                    key="clear_marza_m",
                     on_click=_clear_field,
                     args=("marza_m", INITIAL_QUICK),
                 )
@@ -435,15 +447,20 @@ elif st.session_state["selected_tab"] == "quick":
         with col_actions_q1:
             st.form_submit_button(
                 T["btn_clear_all"],
+                key="clear_quick_all",
                 on_click=clear_quick_all,
             )
         with col_actions_q2:
             st.form_submit_button(
                 T["btn_example"],
+                key="load_quick_example",
                 on_click=load_quick_example,
             )
 
-        submitted_quick = st.form_submit_button(T["btn_quick"])
+        submitted_quick = st.form_submit_button(
+            T["btn_quick"],
+            key="submit_quick",
+        )
     if submitted_quick:
         with st.spinner("Obliczanie..."):
             if None in (tkw_m, cena_m, marza_m):
