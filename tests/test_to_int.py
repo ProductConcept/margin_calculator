@@ -22,4 +22,3 @@ def test_to_int_invalid_input_none():
 def test_to_int_valid_with_flag():
     assert _to_int("10", none_on_error=True) == 10
     assert _to_int("10.5", none_on_error=True) == 10
-

@@ -26,4 +26,3 @@ def test_to_decimal_invalid_string_none():
 def test_to_decimal_valid_with_flag():
     assert _to_decimal("10.5", none_on_error=True) == Decimal("10.5")
     assert _to_decimal("10,5", none_on_error=True) == Decimal("10.5")
-
