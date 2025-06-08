@@ -202,7 +202,7 @@ def _on_tab_change() -> None:
         clear_quick_all()
         st.session_state["selected_tab"] = new_key
         st.query_params.update({"tab": new_key})
-        st.rerun()
+        st.experimental_rerun()
 
 
 st.radio(
