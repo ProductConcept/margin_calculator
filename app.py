@@ -187,7 +187,9 @@ from calculator import licz_marze_z_ceny, cena_z_marzy
 st.title(T["title"])
 
 # determine active tab from query params or session state
-query = st.experimental_get_query_params()
+# use the new ``st.query_params`` API instead of the deprecated
+# ``st.experimental_get_query_params``
+query = st.query_params
 default_tab = query.get("tab", ["discount"])[0]
 st.session_state.setdefault("selected_tab", default_tab)
 
