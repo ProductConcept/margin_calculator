@@ -222,7 +222,9 @@ if st.session_state["selected_tab"] == "discount":
 
         col_a, col_or1, col_b = st.columns([1, 0.15, 1])
         with col_a:
-            tkw = st.number_input(T["tkw"], key="tkw", value=0.0)
+            tkw = Decimal(
+                str(st.number_input(T["tkw"], key="tkw", value=0.0))
+            )
             sub_a1, sub_a2, sub_a3 = st.columns([1, 1, 1])
             with sub_a2:
                 st.form_submit_button(
@@ -234,7 +236,9 @@ if st.session_state["selected_tab"] == "discount":
             or_html = f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>"
             st.markdown(or_html, unsafe_allow_html=True)
         with col_b:
-            cena_stara = st.number_input(T["price"], key="cena_stara", value=0.0)
+            cena_stara = Decimal(
+                str(st.number_input(T["price"], key="cena_stara", value=0.0))
+            )
             sub_b1, sub_b2, sub_b3 = st.columns([1, 1, 1])
             with sub_b2:
                 st.form_submit_button(
@@ -245,7 +249,9 @@ if st.session_state["selected_tab"] == "discount":
 
         col_c, col_or2, col_d = st.columns([1, 0.15, 1])
         with col_c:
-            marza_stara = st.number_input(T["old_margin"], key="marza_stara", value=0.0)
+            marza_stara = Decimal(
+                str(st.number_input(T["old_margin"], key="marza_stara", value=0.0))
+            )
             sub_c1, sub_c2, sub_c3 = st.columns([1, 1, 1])
             with sub_c2:
                 st.form_submit_button(
@@ -256,7 +262,9 @@ if st.session_state["selected_tab"] == "discount":
         with col_or2:
             st.markdown(or_html, unsafe_allow_html=True)
         with col_d:
-            cena_nowa = st.number_input(T["new_price"], key="cena_nowa", value=0.0)
+            cena_nowa = Decimal(
+                str(st.number_input(T["new_price"], key="cena_nowa", value=0.0))
+            )
             sub_d1, sub_d2, sub_d3 = st.columns([1, 1, 1])
             with sub_d2:
                 st.form_submit_button(
@@ -267,7 +275,9 @@ if st.session_state["selected_tab"] == "discount":
 
         col_e, col_f = st.columns([1, 1])
         with col_e:
-            marza_nowa = st.number_input(T["new_margin"], key="marza_nowa", value=0.0)
+            marza_nowa = Decimal(
+                str(st.number_input(T["new_margin"], key="marza_nowa", value=0.0))
+            )
             sub_e1, sub_e2, sub_e3 = st.columns([1, 1, 1])
             with sub_e2:
                 st.form_submit_button(
@@ -276,7 +286,9 @@ if st.session_state["selected_tab"] == "discount":
                     args=("marza_nowa", INITIAL_DISCOUNT),
                 )
         with col_f:
-            ilosc_stara = st.number_input(T["qty"], key="ilosc_stara", value=0, step=1)
+            ilosc_stara = Decimal(
+                str(st.number_input(T["qty"], key="ilosc_stara", value=0, step=1))
+            )
             sub_f1, sub_f2, sub_f3 = st.columns([1, 1, 1])
             with sub_f2:
                 st.form_submit_button(
@@ -326,9 +338,7 @@ if st.session_state["selected_tab"] == "discount":
                 st.error(T["err_pair_old"])
                 st.stop()
             else:
-                marza_stara = (
-                    float(licz_marze_z_ceny(Decimal(tkw), Decimal(cena_stara))) * 100
-                )
+                marza_stara = licz_marze_z_ceny(tkw, cena_stara) * 100
 
             if _entered("marza_nowa"):
                 cena_nowa = cena_z_marzy(
@@ -339,9 +349,7 @@ if st.session_state["selected_tab"] == "discount":
                 st.error(T["err_pair_new"])
                 st.stop()
             else:
-                marza_nowa = (
-                    float(licz_marze_z_ceny(Decimal(tkw), Decimal(cena_nowa))) * 100
-                )
+                marza_nowa = licz_marze_z_ceny(tkw, cena_nowa) * 100
 
             zysk_stary = cena_stara - tkw
             zysk_nowy = cena_nowa - tkw
@@ -380,7 +388,9 @@ elif st.session_state["selected_tab"] == "quick":
             [1, 0.13, 1, 0.13, 1]
         )
         with col_tkw:
-            tkw_m = st.number_input(T["tkw"], key="tkw_m", value=0.0)
+            tkw_m = Decimal(
+                str(st.number_input(T["tkw"], key="tkw_m", value=0.0))
+            )
             sub_q1, sub_q2, sub_q3 = st.columns([1, 1, 1])
             with sub_q2:
                 st.form_submit_button(
@@ -391,7 +401,9 @@ elif st.session_state["selected_tab"] == "quick":
         with col_or_a:
             st.markdown(or_html, unsafe_allow_html=True)
         with col_price:
-            cena_m = st.number_input(T["price"], key="cena_m", value=0.0)
+            cena_m = Decimal(
+                str(st.number_input(T["price"], key="cena_m", value=0.0))
+            )
             sub_q4, sub_q5, sub_q6 = st.columns([1, 1, 1])
             with sub_q5:
                 st.form_submit_button(
@@ -402,10 +414,14 @@ elif st.session_state["selected_tab"] == "quick":
         with col_or_b:
             st.markdown(or_html, unsafe_allow_html=True)
         with col_margin:
-            marza_m = st.number_input(
-                T["new_margin"].replace("Nowa ", "").replace("New ", "").capitalize(),
-                key="marza_m",
-                value=0.0,
+            marza_m = Decimal(
+                str(
+                    st.number_input(
+                        T["new_margin"].replace("Nowa ", "").replace("New ", "").capitalize(),
+                        key="marza_m",
+                        value=0.0,
+                    )
+                )
             )
             sub_q7, sub_q8, sub_q9 = st.columns([1, 1, 1])
             with sub_q8:
@@ -440,17 +456,13 @@ elif st.session_state["selected_tab"] == "quick":
                 st.stop()
 
             if _entered("cena_m") and _entered("tkw_m"):
-                marza_m = (
-                    float(licz_marze_z_ceny(Decimal(tkw_m), Decimal(cena_m))) * 100
-                )
+                marza_m = licz_marze_z_ceny(tkw_m, cena_m) * 100
             elif _entered("tkw_m") and _entered("marza_m"):
-                cena_m = float(
-                    cena_z_marzy(
-                        Decimal(tkw_m), Decimal(marza_m) / Decimal(100)
-                    ).quantize(Decimal("0.01"))
-                )
+                cena_m = cena_z_marzy(
+                    tkw_m, marza_m / Decimal(100)
+                ).quantize(Decimal("0.01"))
             elif _entered("cena_m") and _entered("marza_m"):
-                tkw_m = cena_m * (1 - marza_m / 100)
+                tkw_m = cena_m * (Decimal("1") - marza_m / Decimal(100))
 
             st.success(T["res_quick"].format(tkw=tkw_m, price=cena_m, margin=marza_m))
 
