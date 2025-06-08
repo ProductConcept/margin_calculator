@@ -1,9 +1,3 @@
-from pathlib import Path
-import sys
-
-# Allow importing from repo root
-sys.path.append(str(Path(__file__).resolve().parents[1]))
-
 from utils import _to_int
 
 
