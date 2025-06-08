@@ -39,7 +39,7 @@ PL = {
     "res_extra": "➕ **Dodatkowa sprzedaż:** {v} szt.",
     "res_total": "📦 **Łącznie:** {v} szt.",
     "res_quick": "**TKW:** {tkw:.2f} zł  |  **Cena:** {price:.2f} zł  |  **Marża:** {margin:.2f} %",
-    "author": "Autor programu: Marcin Czerwiński  |  Product Concept"
+    "author": "Autor programu: Marcin Czerwiński  |  Product Concept",
 }
 EN = {
     "title": "💰 Margin Calculator",
@@ -71,7 +71,7 @@ EN = {
     "res_extra": "➕ **Extra sales needed:** {v} pcs",
     "res_total": "📦 **Total:** {v} pcs",
     "res_quick": "**Production cost:** {tkw:.2f} PLN  |  **Price:** {price:.2f} PLN  |  **Margin:** {margin:.2f} %",
-    "author": "Program author: Marcin Czerwiński  |  Product Concept"
+    "author": "Program author: Marcin Czerwiński  |  Product Concept",
 }
 
 lang = st.sidebar.selectbox("Language / Język", ("Polski", "English"))
@@ -173,6 +173,7 @@ def _to_int(value: str) -> int:
     except (InvalidOperation, ValueError):
         return 0
 
+
 # ------------------ Funkcje matematyczne -------------------
 
 from calculator import licz_marze_z_ceny, cena_z_marzy
@@ -180,18 +181,47 @@ from calculator import licz_marze_z_ceny, cena_z_marzy
 # ------------------ UI -------------------------------------
 st.title(T["title"])
 
-tab_obnizka, tab_szybki = st.tabs([T["tab_discount"], T["tab_quick"]])
+# Track which calculator tab is active using query params and session state
+param_tab = st.experimental_get_query_params().get("tab", ["discount"])[0]
+st.session_state.setdefault("current_tab", param_tab)
+
+label_map = {
+    "discount": T["tab_discount"],
+    "quick": T["tab_quick"],
+}
+reverse_map = {v: k for k, v in label_map.items()}
+current_label = label_map[st.session_state.current_tab]
+
+choice = st.radio(
+    "",
+    list(label_map.values()),
+    horizontal=True,
+    index=list(label_map.values()).index(current_label),
+)
+
+if reverse_map[choice] != st.session_state.current_tab:
+    # Tab changed – reset calculators and refresh
+    st.session_state.current_tab = reverse_map[choice]
+    clear_discount_all()
+    clear_quick_all()
+    st.experimental_set_query_params(tab=st.session_state.current_tab)
+    st.experimental_rerun()
 
 # ========= Zakładka 1: obniżka marży / ceny ================
-with tab_obnizka:
+if st.session_state.current_tab == "discount":
     st.header(T["discount_header"])
 
     col_a, col_or1, col_b = st.columns([1, 0.15, 1])
     with col_a:
         tkw = _to_decimal(st.text_input(T["tkw"], key="tkw"))
-        sub_a1, sub_a2, sub_a3 = st.columns([1,1,1])
+        sub_a1, sub_a2, sub_a3 = st.columns([1, 1, 1])
         with sub_a2:
-            st.button(T["btn_clear"], key="clr_tkw", on_click=_clear_field, args=("tkw", INITIAL_DISCOUNT))
+            st.button(
+                T["btn_clear"],
+                key="clr_tkw",
+                on_click=_clear_field,
+                args=("tkw", INITIAL_DISCOUNT),
+            )
     with col_or1:
         st.markdown(
             f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>",
@@ -199,16 +229,26 @@ with tab_obnizka:
         )
     with col_b:
         cena_stara = _to_decimal(st.text_input(T["price"], key="cena_stara"))
-        sub_b1, sub_b2, sub_b3 = st.columns([1,1,1])
+        sub_b1, sub_b2, sub_b3 = st.columns([1, 1, 1])
         with sub_b2:
-            st.button(T["btn_clear"], key="clr_cena_stara", on_click=_clear_field, args=("cena_stara", INITIAL_DISCOUNT))
+            st.button(
+                T["btn_clear"],
+                key="clr_cena_stara",
+                on_click=_clear_field,
+                args=("cena_stara", INITIAL_DISCOUNT),
+            )
 
     col_c, col_or2, col_d = st.columns([1, 0.15, 1])
     with col_c:
         marza_stara = _to_decimal(st.text_input(T["old_margin"], key="marza_stara"))
-        sub_c1, sub_c2, sub_c3 = st.columns([1,1,1])
+        sub_c1, sub_c2, sub_c3 = st.columns([1, 1, 1])
         with sub_c2:
-            st.button(T["btn_clear"], key="clr_marza_stara", on_click=_clear_field, args=("marza_stara", INITIAL_DISCOUNT))
+            st.button(
+                T["btn_clear"],
+                key="clr_marza_stara",
+                on_click=_clear_field,
+                args=("marza_stara", INITIAL_DISCOUNT),
+            )
     with col_or2:
         st.markdown(
             f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>",
@@ -216,27 +256,46 @@ with tab_obnizka:
         )
     with col_d:
         cena_nowa = _to_decimal(st.text_input(T["new_price"], key="cena_nowa"))
-        sub_d1, sub_d2, sub_d3 = st.columns([1,1,1])
+        sub_d1, sub_d2, sub_d3 = st.columns([1, 1, 1])
         with sub_d2:
-            st.button(T["btn_clear"], key="clr_cena_nowa", on_click=_clear_field, args=("cena_nowa", INITIAL_DISCOUNT))
+            st.button(
+                T["btn_clear"],
+                key="clr_cena_nowa",
+                on_click=_clear_field,
+                args=("cena_nowa", INITIAL_DISCOUNT),
+            )
 
     col_e, col_f = st.columns([1, 1])
     with col_e:
         marza_nowa = _to_decimal(st.text_input(T["new_margin"], key="marza_nowa"))
-        sub_e1, sub_e2, sub_e3 = st.columns([1,1,1])
+        sub_e1, sub_e2, sub_e3 = st.columns([1, 1, 1])
         with sub_e2:
-            st.button(T["btn_clear"], key="clr_marza_nowa", on_click=_clear_field, args=("marza_nowa", INITIAL_DISCOUNT))
+            st.button(
+                T["btn_clear"],
+                key="clr_marza_nowa",
+                on_click=_clear_field,
+                args=("marza_nowa", INITIAL_DISCOUNT),
+            )
     with col_f:
         ilosc_stara = _to_int(st.text_input(T["qty"], key="ilosc_stara"))
-        sub_f1, sub_f2, sub_f3 = st.columns([1,1,1])
+        sub_f1, sub_f2, sub_f3 = st.columns([1, 1, 1])
         with sub_f2:
-            st.button(T["btn_clear"], key="clr_ilosc_stara", on_click=_clear_field, args=("ilosc_stara", INITIAL_DISCOUNT))
+            st.button(
+                T["btn_clear"],
+                key="clr_ilosc_stara",
+                on_click=_clear_field,
+                args=("ilosc_stara", INITIAL_DISCOUNT),
+            )
 
     col_actions_d1, col_actions_d2 = st.columns([1, 1])
     with col_actions_d1:
-        st.button(T["btn_clear_all"], key="clear_all_discount", on_click=clear_discount_all)
+        st.button(
+            T["btn_clear_all"], key="clear_all_discount", on_click=clear_discount_all
+        )
     with col_actions_d2:
-        st.button(T["btn_example"], key="example_discount", on_click=load_discount_example)
+        st.button(
+            T["btn_example"], key="example_discount", on_click=load_discount_example
+        )
 
     if st.button(T["btn_discount"], key="discount_btn"):
         if not _entered("tkw") or not _entered("ilosc_stara"):
@@ -252,9 +311,9 @@ with tab_obnizka:
             st.error(T["err_pair_old"])
             st.stop()
         else:
-            marza_stara = float(
-                licz_marze_z_ceny(Decimal(tkw), Decimal(cena_stara))
-            ) * 100
+            marza_stara = (
+                float(licz_marze_z_ceny(Decimal(tkw), Decimal(cena_stara))) * 100
+            )
 
         if _entered("marza_nowa"):
             cena_nowa = cena_z_marzy(
@@ -265,9 +324,9 @@ with tab_obnizka:
             st.error(T["err_pair_new"])
             st.stop()
         else:
-            marza_nowa = float(
-                licz_marze_z_ceny(Decimal(tkw), Decimal(cena_nowa))
-            ) * 100
+            marza_nowa = (
+                float(licz_marze_z_ceny(Decimal(tkw), Decimal(cena_nowa))) * 100
+            )
 
         zysk_stary = cena_stara - tkw
         zysk_nowy = cena_nowa - tkw
@@ -293,16 +352,26 @@ with tab_obnizka:
         )
 
 # ========= Zakładka 2: szybki kalkulator ====================
-with tab_szybki:
+elif st.session_state.current_tab == "quick":
     st.header(T["quick_header"])
-    st.markdown(f"<span style='font-size:0.8em;color:gray'>{T['quick_sub']}</span>", unsafe_allow_html=True)
+    st.markdown(
+        f"<span style='font-size:0.8em;color:gray'>{T['quick_sub']}</span>",
+        unsafe_allow_html=True,
+    )
 
-    col_tkw, col_or_a, col_price, col_or_b, col_margin = st.columns([1, 0.13, 1, 0.13, 1])
+    col_tkw, col_or_a, col_price, col_or_b, col_margin = st.columns(
+        [1, 0.13, 1, 0.13, 1]
+    )
     with col_tkw:
         tkw_m = _to_decimal(st.text_input(T["tkw"], key="tkw_m"))
-        sub_q1, sub_q2, sub_q3 = st.columns([1,1,1])
+        sub_q1, sub_q2, sub_q3 = st.columns([1, 1, 1])
         with sub_q2:
-            st.button(T["btn_clear"], key="clr_tkw_m", on_click=_clear_field, args=("tkw_m", INITIAL_QUICK))
+            st.button(
+                T["btn_clear"],
+                key="clr_tkw_m",
+                on_click=_clear_field,
+                args=("tkw_m", INITIAL_QUICK),
+            )
     with col_or_a:
         st.markdown(
             f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>",
@@ -310,9 +379,14 @@ with tab_szybki:
         )
     with col_price:
         cena_m = _to_decimal(st.text_input(T["price"], key="cena_m"))
-        sub_q4, sub_q5, sub_q6 = st.columns([1,1,1])
+        sub_q4, sub_q5, sub_q6 = st.columns([1, 1, 1])
         with sub_q5:
-            st.button(T["btn_clear"], key="clr_cena_m", on_click=_clear_field, args=("cena_m", INITIAL_QUICK))
+            st.button(
+                T["btn_clear"],
+                key="clr_cena_m",
+                on_click=_clear_field,
+                args=("cena_m", INITIAL_QUICK),
+            )
     with col_or_b:
         st.markdown(
             f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>",
@@ -325,9 +399,14 @@ with tab_szybki:
                 key="marza_m",
             )
         )
-        sub_q7, sub_q8, sub_q9 = st.columns([1,1,1])
+        sub_q7, sub_q8, sub_q9 = st.columns([1, 1, 1])
         with sub_q8:
-            st.button(T["btn_clear"], key="clr_marza_m", on_click=_clear_field, args=("marza_m", INITIAL_QUICK))
+            st.button(
+                T["btn_clear"],
+                key="clr_marza_m",
+                on_click=_clear_field,
+                args=("marza_m", INITIAL_QUICK),
+            )
 
     col_actions_q1, col_actions_q2 = st.columns([1, 1])
     with col_actions_q1:
@@ -342,20 +421,20 @@ with tab_szybki:
             st.stop()
 
         if _entered("cena_m") and _entered("tkw_m"):
-            marza_m = float(
-                licz_marze_z_ceny(Decimal(tkw_m), Decimal(cena_m))
-            ) * 100
+            marza_m = float(licz_marze_z_ceny(Decimal(tkw_m), Decimal(cena_m))) * 100
         elif _entered("tkw_m") and _entered("marza_m"):
             cena_m = float(
-                cena_z_marzy(Decimal(tkw_m), Decimal(marza_m) / Decimal(100))
-                .quantize(Decimal("0.01"))
+                cena_z_marzy(Decimal(tkw_m), Decimal(marza_m) / Decimal(100)).quantize(
+                    Decimal("0.01")
+                )
             )
         elif _entered("cena_m") and _entered("marza_m"):
             tkw_m = cena_m * (1 - marza_m / 100)
 
-        st.success(
-            T["res_quick"].format(tkw=tkw_m, price=cena_m, margin=marza_m)
-        )
+        st.success(T["res_quick"].format(tkw=tkw_m, price=cena_m, margin=marza_m))
 
 # ====== Informacja o autorze ======
-st.markdown(f"<div style='margin-top:2em;text-align:center;color:#999'>{T['author']}</div>", unsafe_allow_html=True)
+st.markdown(
+    f"<div style='margin-top:2em;text-align:center;color:#999'>{T['author']}</div>",
+    unsafe_allow_html=True,
+)
