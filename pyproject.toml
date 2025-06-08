@@ -8,4 +8,8 @@ version = "0.1.0"
 dependencies = [
     "streamlit==1.45.1",
 ]
+
+[tool.setuptools]
 packages = ["margin_calculator"]
+[tool.setuptools.package-dir]
+margin_calculator = "."

@@ -1,7 +1,7 @@
 import unittest
 from decimal import Decimal
 
-from calculator import licz_marze_z_ceny, cena_z_marzy
+from margin_calculator.calculator import licz_marze_z_ceny, cena_z_marzy
 
 
 class TestMarginFunctions(unittest.TestCase):
