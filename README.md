@@ -9,10 +9,12 @@ The application supports both Polish and English languages and runs entirely in 
 
 ## Setup
 
-Install the required packages and start the application:
+Install the required packages and set up the pre-commit hooks before starting the application:
 
 ```bash
 pip install -r requirements.txt
+pip install pre-commit
+pre-commit install
 streamlit run app.py
 ```
 
