@@ -141,6 +141,12 @@ def _to_decimal(value: str) -> Decimal:
         return Decimal("0")
 
 
+def _entered(key: str) -> bool:
+    """Return ``True`` if the user explicitly provided a value for ``key``."""
+    val = st.session_state.get(key, "")
+    return str(val).strip() != ""
+
+
 def _to_int(value: str) -> int:
     """Convert user input to ``int``. Returns ``0`` on error."""
     try:
@@ -202,15 +208,15 @@ with tab_obnizka:
         st.button("Load example", key="example_discount", on_click=load_discount_example)
 
     if st.button(T["btn_discount"], key="discount_btn"):
-        if tkw == 0 or ilosc_stara == 0:
+        if not _entered("tkw") or not _entered("ilosc_stara"):
             st.error(T["err_fill"])
             st.stop()
 
-        if marza_stara:
+        if _entered("marza_stara"):
             cena_stara = float(
                 cena_z_marzy(Decimal(tkw), Decimal(marza_stara) / Decimal(100))
             )
-        elif not cena_stara:
+        elif not _entered("cena_stara"):
             st.error(T["err_pair_old"])
             st.stop()
         else:
@@ -218,11 +224,11 @@ with tab_obnizka:
                 licz_marze_z_ceny(Decimal(tkw), Decimal(cena_stara))
             ) * 100
 
-        if marza_nowa:
+        if _entered("marza_nowa"):
             cena_nowa = float(
                 cena_z_marzy(Decimal(tkw), Decimal(marza_nowa) / Decimal(100))
             )
-        elif not cena_nowa:
+        elif not _entered("cena_nowa"):
             st.error(T["err_pair_new"])
             st.stop()
         else:
@@ -291,20 +297,20 @@ with tab_szybki:
         st.button("Load example", key="example_quick", on_click=load_quick_example)
 
     if st.button(T["btn_quick"], key="quick_btn"):
-        pola = [tkw_m > 0, cena_m > 0, marza_m > 0]
+        pola = [_entered("tkw_m"), _entered("cena_m"), _entered("marza_m")]
         if sum(pola) < 2:
             st.error(T["err_two_values"])
             st.stop()
 
-        if cena_m and tkw_m:
+        if _entered("cena_m") and _entered("tkw_m"):
             marza_m = float(
                 licz_marze_z_ceny(Decimal(tkw_m), Decimal(cena_m))
             ) * 100
-        elif tkw_m and marza_m:
+        elif _entered("tkw_m") and _entered("marza_m"):
             cena_m = float(
                 cena_z_marzy(Decimal(tkw_m), Decimal(marza_m) / Decimal(100))
             )
-        elif cena_m and marza_m:
+        elif _entered("cena_m") and _entered("marza_m"):
             tkw_m = cena_m * (1 - marza_m / 100)
 
         st.success(
