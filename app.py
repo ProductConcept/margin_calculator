@@ -16,14 +16,17 @@ PL = {
     "discount_header": "📉 Obniżka marży / ceny",
     "quick_header": "⚙️ Szybki kalkulator marży",
     "quick_sub": "(podaj dowolne 2 pola)",
-    "tkw": "TKW (koszt jednostkowy) [zł]",
-    "price": "Cena sprzedaży [zł]",
+    "tkw": "TKW (koszt jednostkowy)",
+    "price": "Cena sprzedaży",
     "old_margin": "Obecna marża [%]",
     "new_margin": "Nowa marża [%]",
-    "new_price": "Nowa cena sprzedaży [zł]",
+    "new_price": "Nowa cena sprzedaży",
     "qty": "Ilość sprzedana wcześniej [szt.]",
     "btn_discount": "Oblicz",
     "btn_quick": "Oblicz",
+    "btn_clear": "Wyczyść",
+    "btn_clear_all": "Wyczyść wszystko",
+    "btn_example": "Wczytaj przykład",
     "or": "lub",
     "err_fill": "Uzupełnij TKW oraz ilość sprzedaną wcześniej.",
     "err_pair_old": "Podaj starą marżę lub starą cenę.",
@@ -53,6 +56,9 @@ EN = {
     "qty": "Quantity sold before [pcs]",
     "btn_discount": "Calculate",
     "btn_quick": "Calculate",
+    "btn_clear": "Clear",
+    "btn_clear_all": "Clear all",
+    "btn_example": "Load example",
     "or": "or",
     "err_fill": "Fill Production cost and previous quantity first.",
     "err_pair_old": "Provide either old margin or old price.",
@@ -87,11 +93,20 @@ INITIAL_QUICK = {
     "marza_m": "",
 }
 
-EXAMPLE_DISCOUNT = {
+EXAMPLE_DISCOUNT_PRICE = {
     "tkw": "80.0",
     "cena_stara": "120.0",
     "marza_stara": "",
     "cena_nowa": "100.0",
+    "marza_nowa": "",
+    "ilosc_stara": "100",
+}
+
+EXAMPLE_DISCOUNT_MARGIN = {
+    "tkw": "80.0",
+    "cena_stara": "",
+    "marza_stara": "40.0",
+    "cena_nowa": "",
     "marza_nowa": "20.0",
     "ilosc_stara": "100",
 }
@@ -104,6 +119,7 @@ EXAMPLE_QUICK = {
 
 for k, v in {**INITIAL_DISCOUNT, **INITIAL_QUICK}.items():
     st.session_state.setdefault(k, v)
+st.session_state.setdefault("example_toggle", 0)
 
 
 def _clear_field(key: str, init_dict: dict) -> None:
@@ -117,8 +133,11 @@ def clear_discount_all() -> None:
 
 
 def load_discount_example() -> None:
+    toggle = st.session_state.get("example_toggle", 0)
+    example = EXAMPLE_DISCOUNT_PRICE if toggle == 0 else EXAMPLE_DISCOUNT_MARGIN
     for k in INITIAL_DISCOUNT:
-        st.session_state[k] = EXAMPLE_DISCOUNT[k]
+        st.session_state[k] = example[k]
+    st.session_state["example_toggle"] = 1 - toggle
 
 
 def clear_quick_all() -> None:
@@ -170,7 +189,9 @@ with tab_obnizka:
     col_a, col_or1, col_b = st.columns([1, 0.15, 1])
     with col_a:
         tkw = _to_decimal(st.text_input(T["tkw"], key="tkw"))
-        st.button("Clear", key="clr_tkw", on_click=_clear_field, args=("tkw", INITIAL_DISCOUNT))
+        sub_a1, sub_a2, sub_a3 = st.columns([1,1,1])
+        with sub_a2:
+            st.button(T["btn_clear"], key="clr_tkw", on_click=_clear_field, args=("tkw", INITIAL_DISCOUNT))
     with col_or1:
         st.markdown(
             f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>",
@@ -178,12 +199,16 @@ with tab_obnizka:
         )
     with col_b:
         cena_stara = _to_decimal(st.text_input(T["price"], key="cena_stara"))
-        st.button("Clear", key="clr_cena_stara", on_click=_clear_field, args=("cena_stara", INITIAL_DISCOUNT))
+        sub_b1, sub_b2, sub_b3 = st.columns([1,1,1])
+        with sub_b2:
+            st.button(T["btn_clear"], key="clr_cena_stara", on_click=_clear_field, args=("cena_stara", INITIAL_DISCOUNT))
 
     col_c, col_or2, col_d = st.columns([1, 0.15, 1])
     with col_c:
         marza_stara = _to_decimal(st.text_input(T["old_margin"], key="marza_stara"))
-        st.button("Clear", key="clr_marza_stara", on_click=_clear_field, args=("marza_stara", INITIAL_DISCOUNT))
+        sub_c1, sub_c2, sub_c3 = st.columns([1,1,1])
+        with sub_c2:
+            st.button(T["btn_clear"], key="clr_marza_stara", on_click=_clear_field, args=("marza_stara", INITIAL_DISCOUNT))
     with col_or2:
         st.markdown(
             f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>",
@@ -191,21 +216,27 @@ with tab_obnizka:
         )
     with col_d:
         cena_nowa = _to_decimal(st.text_input(T["new_price"], key="cena_nowa"))
-        st.button("Clear", key="clr_cena_nowa", on_click=_clear_field, args=("cena_nowa", INITIAL_DISCOUNT))
+        sub_d1, sub_d2, sub_d3 = st.columns([1,1,1])
+        with sub_d2:
+            st.button(T["btn_clear"], key="clr_cena_nowa", on_click=_clear_field, args=("cena_nowa", INITIAL_DISCOUNT))
 
     col_e, col_f = st.columns([1, 1])
     with col_e:
         marza_nowa = _to_decimal(st.text_input(T["new_margin"], key="marza_nowa"))
-        st.button("Clear", key="clr_marza_nowa", on_click=_clear_field, args=("marza_nowa", INITIAL_DISCOUNT))
+        sub_e1, sub_e2, sub_e3 = st.columns([1,1,1])
+        with sub_e2:
+            st.button(T["btn_clear"], key="clr_marza_nowa", on_click=_clear_field, args=("marza_nowa", INITIAL_DISCOUNT))
     with col_f:
         ilosc_stara = _to_int(st.text_input(T["qty"], key="ilosc_stara"))
-        st.button("Clear", key="clr_ilosc_stara", on_click=_clear_field, args=("ilosc_stara", INITIAL_DISCOUNT))
+        sub_f1, sub_f2, sub_f3 = st.columns([1,1,1])
+        with sub_f2:
+            st.button(T["btn_clear"], key="clr_ilosc_stara", on_click=_clear_field, args=("ilosc_stara", INITIAL_DISCOUNT))
 
     col_actions_d1, col_actions_d2 = st.columns([1, 1])
     with col_actions_d1:
-        st.button("Clear all", key="clear_all_discount", on_click=clear_discount_all)
+        st.button(T["btn_clear_all"], key="clear_all_discount", on_click=clear_discount_all)
     with col_actions_d2:
-        st.button("Load example", key="example_discount", on_click=load_discount_example)
+        st.button(T["btn_example"], key="example_discount", on_click=load_discount_example)
 
     if st.button(T["btn_discount"], key="discount_btn"):
         if not _entered("tkw") or not _entered("ilosc_stara"):
@@ -269,7 +300,9 @@ with tab_szybki:
     col_tkw, col_or_a, col_price, col_or_b, col_margin = st.columns([1, 0.13, 1, 0.13, 1])
     with col_tkw:
         tkw_m = _to_decimal(st.text_input(T["tkw"], key="tkw_m"))
-        st.button("Clear", key="clr_tkw_m", on_click=_clear_field, args=("tkw_m", INITIAL_QUICK))
+        sub_q1, sub_q2, sub_q3 = st.columns([1,1,1])
+        with sub_q2:
+            st.button(T["btn_clear"], key="clr_tkw_m", on_click=_clear_field, args=("tkw_m", INITIAL_QUICK))
     with col_or_a:
         st.markdown(
             f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>",
@@ -277,7 +310,9 @@ with tab_szybki:
         )
     with col_price:
         cena_m = _to_decimal(st.text_input(T["price"], key="cena_m"))
-        st.button("Clear", key="clr_cena_m", on_click=_clear_field, args=("cena_m", INITIAL_QUICK))
+        sub_q4, sub_q5, sub_q6 = st.columns([1,1,1])
+        with sub_q5:
+            st.button(T["btn_clear"], key="clr_cena_m", on_click=_clear_field, args=("cena_m", INITIAL_QUICK))
     with col_or_b:
         st.markdown(
             f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>",
@@ -290,13 +325,15 @@ with tab_szybki:
                 key="marza_m",
             )
         )
-        st.button("Clear", key="clr_marza_m", on_click=_clear_field, args=("marza_m", INITIAL_QUICK))
+        sub_q7, sub_q8, sub_q9 = st.columns([1,1,1])
+        with sub_q8:
+            st.button(T["btn_clear"], key="clr_marza_m", on_click=_clear_field, args=("marza_m", INITIAL_QUICK))
 
     col_actions_q1, col_actions_q2 = st.columns([1, 1])
     with col_actions_q1:
-        st.button("Clear all", key="clear_all_quick", on_click=clear_quick_all)
+        st.button(T["btn_clear_all"], key="clear_all_quick", on_click=clear_quick_all)
     with col_actions_q2:
-        st.button("Load example", key="example_quick", on_click=load_quick_example)
+        st.button(T["btn_example"], key="example_quick", on_click=load_quick_example)
 
     if st.button(T["btn_quick"], key="quick_btn"):
         pola = [_entered("tkw_m"), _entered("cena_m"), _entered("marza_m")]
