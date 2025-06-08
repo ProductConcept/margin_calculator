@@ -8,6 +8,12 @@ st.set_page_config(
     layout="centered",
 )
 
+# Prevent button labels from wrapping
+st.markdown(
+    "<style>div.stButton>button{white-space:nowrap}</style>",
+    unsafe_allow_html=True,
+)
+
 # ------------------ Tłumaczenia / Translations -------------
 PL = {
     "title": "💰 Kalkulator Marży",
