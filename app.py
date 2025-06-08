@@ -21,7 +21,7 @@ PL = {
     "tab_quick": "Szybki kalkulator marży",
     "discount_header": "📉 Obniżka marży / ceny",
     "quick_header": "⚙️ Szybki kalkulator marży",
-    "quick_sub": "(podaj dowolne 2 pola)",
+    "quick_sub": "podaj dowolne 2 pola",
     "tkw": "TKW (koszt jednostkowy)",
     "price": "Cena sprzedaży",
     "old_margin": "Obecna marża [%]",
@@ -53,7 +53,7 @@ EN = {
     "tab_quick": "Quick margin calc",
     "discount_header": "📉 Margin / price drop",
     "quick_header": "⚙️ Quick margin calculator",
-    "quick_sub": "(fill any 2 fields)",
+    "quick_sub": "fill any 2 fields",
     "tkw": "Production cost (unit cost) [PLN]",
     "price": "Sale price [PLN]",
     "old_margin": "Current margin [%]",
@@ -301,7 +301,9 @@ with tab_obnizka:
 # ========= Zakładka 2: szybki kalkulator ====================
 with tab_szybki:
     st.header(T["quick_header"])
-    st.markdown(f"<span style='font-size:0.8em;color:gray'>{T['quick_sub']}</span>", unsafe_allow_html=True)
+    st.markdown(
+        f"<div style='text-align:center;font-size:0.75em;color:gray'>{T['quick_sub']}</div>",
+        unsafe_allow_html=True)
 
     col_tkw, col_or_a, col_price, col_or_b, col_margin = st.columns([1, 0.13, 1, 0.13, 1])
     with col_tkw:
