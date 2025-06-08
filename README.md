@@ -33,3 +33,20 @@ pytest
 
 Select the desired language from the sidebar, choose one of the tabs, fill in the required fields and press **Calculate**. The application will display the computed margin and related information.
 
+
+## Command line interface
+
+Basic calculations are also accessible from the command line. Run `python cli.py --help` to list the available commands.
+
+Calculate margin:
+
+```bash
+python cli.py marza 50 100
+```
+
+Calculate sale price from a desired margin:
+
+```bash
+python cli.py cena 50 0.2
+```
+
