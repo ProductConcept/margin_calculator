@@ -3,7 +3,7 @@
 import argparse
 from decimal import Decimal
 
-from calculator import cena_z_marzy, licz_marze_z_ceny
+from margin_calculator.calculator import cena_z_marzy, licz_marze_z_ceny
 
 
 def main() -> None:
