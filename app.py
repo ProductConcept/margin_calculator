@@ -23,6 +23,7 @@ PL = {
     "discount_header": "📉 Obniżka marży / ceny",
     "quick_header": "⚙️ Szybki kalkulator marży",
     "quick_sub": "podaj dowolne 2 pola",
+    "calc_mode": "Tryb kalkulatora",
     "tkw": "TKW (koszt jednostkowy)",
     "price": "Cena sprzedaży",
     "old_margin": "Obecna marża [%]",
@@ -55,6 +56,7 @@ EN = {
     "discount_header": "📉 Margin / price drop",
     "quick_header": "⚙️ Quick margin calculator",
     "quick_sub": "fill any 2 fields",
+    "calc_mode": "Calculator mode",
     "tkw": "Production cost (unit cost)",
     "price": "Sale price",
     "old_margin": "Current margin [%]",
@@ -191,7 +193,7 @@ def _on_tab_change() -> None:
 
 
 st.radio(
-    label="Calculator mode",
+    label=T["calc_mode"],
     options=tab_labels,
     index=0 if st.session_state["selected_tab"] == "discount" else 1,
     key="tab_choice",
