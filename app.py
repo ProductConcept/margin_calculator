@@ -90,7 +90,7 @@ INITIAL_QUICK = {
 EXAMPLE_DISCOUNT = {
     "tkw": "80.0",
     "cena_stara": "120.0",
-    "marza_stara": "33.33",
+    "marza_stara": "",
     "cena_nowa": "100.0",
     "marza_nowa": "20.0",
     "ilosc_stara": "100",
