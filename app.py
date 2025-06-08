@@ -3,6 +3,7 @@
 from decimal import Decimal
 
 import streamlit as st
+import inspect
 
 try:  # Prefer relative import when installed as a package
     from .calculator import cena_z_marzy, licz_marze_z_ceny
@@ -20,6 +21,27 @@ st.markdown(
     "<style>div.stButton>button{white-space:nowrap}</style>",
     unsafe_allow_html=True,
 )
+
+# Compatibility helper for older Streamlit versions.
+_fsb_params = inspect.signature(st.form_submit_button).parameters
+
+
+def compat_submit_button(label: str, *, key=None, on_click=None, args=None):
+    """Wrapper for ``st.form_submit_button`` handling old Streamlit releases."""
+    kwargs = {}
+    if "key" in _fsb_params and key is not None:
+        kwargs["key"] = key
+    if "on_click" in _fsb_params and on_click is not None:
+        kwargs["on_click"] = on_click
+    if "args" in _fsb_params and args is not None:
+        kwargs["args"] = args
+    pressed = st.form_submit_button(label, **kwargs)
+    if "on_click" not in _fsb_params and pressed and on_click is not None:
+        if args:
+            on_click(*args)
+        else:
+            on_click()
+    return pressed
 
 # ------------------ Tłumaczenia / Translations -------------
 PL = {
@@ -260,7 +282,7 @@ if st.session_state["selected_tab"] == "discount":
             )
             sub_a1, sub_a2, sub_a3 = st.columns([1, 1, 1])
             with sub_a2:
-                st.form_submit_button(
+                compat_submit_button(
                     T["btn_clear"],
                     key="clear_tkw",
                     on_click=_clear_field_cb,
@@ -275,7 +297,7 @@ if st.session_state["selected_tab"] == "discount":
             )
             sub_b1, sub_b2, sub_b3 = st.columns([1, 1, 1])
             with sub_b2:
-                st.form_submit_button(
+                compat_submit_button(
                     T["btn_clear"],
                     key="clear_cena_stara",
                     on_click=_clear_field_cb,
@@ -289,7 +311,7 @@ if st.session_state["selected_tab"] == "discount":
             )
             sub_c1, sub_c2, sub_c3 = st.columns([1, 1, 1])
             with sub_c2:
-                st.form_submit_button(
+                compat_submit_button(
                     T["btn_clear"],
                     key="clear_marza_stara",
                     on_click=_clear_field_cb,
@@ -303,7 +325,7 @@ if st.session_state["selected_tab"] == "discount":
             )
             sub_d1, sub_d2, sub_d3 = st.columns([1, 1, 1])
             with sub_d2:
-                st.form_submit_button(
+                compat_submit_button(
                     T["btn_clear"],
                     key="clear_cena_nowa",
                     on_click=_clear_field_cb,
@@ -317,7 +339,7 @@ if st.session_state["selected_tab"] == "discount":
             )
             sub_e1, sub_e2, sub_e3 = st.columns([1, 1, 1])
             with sub_e2:
-                st.form_submit_button(
+                compat_submit_button(
                     T["btn_clear"],
                     key="clear_marza_nowa",
                     on_click=_clear_field_cb,
@@ -329,7 +351,7 @@ if st.session_state["selected_tab"] == "discount":
             )
             sub_f1, sub_f2, sub_f3 = st.columns([1, 1, 1])
             with sub_f2:
-                st.form_submit_button(
+                compat_submit_button(
                     T["btn_clear"],
                     key="clear_ilosc_stara",
                     on_click=_clear_field_cb,
@@ -338,19 +360,19 @@ if st.session_state["selected_tab"] == "discount":
 
         col_actions_d1, col_actions_d2 = st.columns([1, 1])
         with col_actions_d1:
-            st.form_submit_button(
+            compat_submit_button(
                 T["btn_clear_all"],
                 key="clear_discount_all",
                 on_click=clear_discount_all_cb,
             )
         with col_actions_d2:
-            st.form_submit_button(
+            compat_submit_button(
                 T["btn_example"],
                 key="load_discount_example",
                 on_click=load_discount_example_cb,
             )
 
-        submitted_discount = st.form_submit_button(
+        submitted_discount = compat_submit_button(
             T["btn_discount"],
             key="submit_discount",
         )
@@ -435,7 +457,7 @@ elif st.session_state["selected_tab"] == "quick":
             )
             sub_q1, sub_q2, sub_q3 = st.columns([1, 1, 1])
             with sub_q2:
-                st.form_submit_button(
+                compat_submit_button(
                     T["btn_clear"],
                     key="clear_tkw_m",
                     on_click=_clear_field_cb,
@@ -449,7 +471,7 @@ elif st.session_state["selected_tab"] == "quick":
             )
             sub_q4, sub_q5, sub_q6 = st.columns([1, 1, 1])
             with sub_q5:
-                st.form_submit_button(
+                compat_submit_button(
                     T["btn_clear"],
                     key="clear_cena_m",
                     on_click=_clear_field_cb,
@@ -469,7 +491,7 @@ elif st.session_state["selected_tab"] == "quick":
             )
             sub_q7, sub_q8, sub_q9 = st.columns([1, 1, 1])
             with sub_q8:
-                st.form_submit_button(
+                compat_submit_button(
                     T["btn_clear"],
                     key="clear_marza_m",
                     on_click=_clear_field_cb,
@@ -478,19 +500,19 @@ elif st.session_state["selected_tab"] == "quick":
 
         col_actions_q1, col_actions_q2 = st.columns([1, 1])
         with col_actions_q1:
-            st.form_submit_button(
+            compat_submit_button(
                 T["btn_clear_all"],
                 key="clear_quick_all",
                 on_click=clear_quick_all_cb,
             )
         with col_actions_q2:
-            st.form_submit_button(
+            compat_submit_button(
                 T["btn_example"],
                 key="load_quick_example",
                 on_click=load_quick_example_cb,
             )
 
-        submitted_quick = st.form_submit_button(
+        submitted_quick = compat_submit_button(
             T["btn_quick"],
             key="submit_quick",
         )
