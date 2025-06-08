@@ -29,13 +29,22 @@ _fsb_params = inspect.signature(st.form_submit_button).parameters
 def compat_submit_button(label: str, *, key=None, on_click=None, args=None):
     """Wrapper for ``st.form_submit_button`` handling old Streamlit releases."""
     kwargs = {}
-    if "key" in _fsb_params and key is not None:
+    label_mod = label
+    # Encode ``key`` with zero-width characters for uniqueness on old Streamlit
+    if "key" not in _fsb_params and key is not None:
+        import hashlib
+
+        digest = hashlib.sha256(str(key).encode()).digest()
+        bits = "".join(f"{b:08b}" for b in digest)
+        zw = "".join("\u200b" if bit == "0" else "\u200c" for bit in bits)
+        label_mod += zw
+    elif "key" in _fsb_params and key is not None:
         kwargs["key"] = key
     if "on_click" in _fsb_params and on_click is not None:
         kwargs["on_click"] = on_click
     if "args" in _fsb_params and args is not None:
         kwargs["args"] = args
-    pressed = st.form_submit_button(label, **kwargs)
+    pressed = st.form_submit_button(label_mod, **kwargs)
     if "on_click" not in _fsb_params and pressed and on_click is not None:
         if args:
             on_click(*args)
