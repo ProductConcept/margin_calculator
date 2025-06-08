@@ -1,3 +1,5 @@
+"""Command line utilities for the margin calculator."""
+
 import argparse
 from decimal import Decimal
 

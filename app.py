@@ -1,6 +1,9 @@
-import streamlit as st
+"""Streamlit application for interactive margin calculations."""
+
 from decimal import Decimal
+import streamlit as st
 from utils import _to_decimal, _to_int
+from calculator import licz_marze_z_ceny, cena_z_marzy
 
 # ------------------ Konfiguracja / Config ------------------
 st.set_page_config(
@@ -162,10 +165,6 @@ def _entered(key: str) -> bool:
     """Return ``True`` if the user explicitly provided a value for ``key``."""
     val = st.session_state.get(key, "")
     return str(val).strip() != ""
-
-# ------------------ Funkcje matematyczne -------------------
-
-from calculator import licz_marze_z_ceny, cena_z_marzy
 
 # ------------------ UI -------------------------------------
 st.title(T["title"])
