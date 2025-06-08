@@ -1,5 +1,6 @@
 import streamlit as st
 from decimal import Decimal
+from utils import _to_decimal, _to_int
 
 # ------------------ Konfiguracja / Config ------------------
 st.set_page_config(
@@ -86,42 +87,42 @@ T = PL if lang == "Polski" else EN
 
 # ------------------ Session state defaults -----------------
 INITIAL_DISCOUNT = {
-    "tkw": 0.0,
-    "cena_stara": 0.0,
-    "marza_stara": 0.0,
-    "cena_nowa": 0.0,
-    "marza_nowa": 0.0,
-    "ilosc_stara": 0,
+    "tkw": "",
+    "cena_stara": "",
+    "marza_stara": "",
+    "cena_nowa": "",
+    "marza_nowa": "",
+    "ilosc_stara": "",
 }
 
 INITIAL_QUICK = {
-    "tkw_m": 0.0,
-    "cena_m": 0.0,
-    "marza_m": 0.0,
+    "tkw_m": "",
+    "cena_m": "",
+    "marza_m": "",
 }
 
 EXAMPLE_DISCOUNT_PRICE = {
-    "tkw": 80.0,
-    "cena_stara": 120.0,
-    "marza_stara": 0.0,
-    "cena_nowa": 100.0,
-    "marza_nowa": 0.0,
-    "ilosc_stara": 100,
+    "tkw": "80.0",
+    "cena_stara": "120.0",
+    "marza_stara": "",
+    "cena_nowa": "100.0",
+    "marza_nowa": "",
+    "ilosc_stara": "100",
 }
 
 EXAMPLE_DISCOUNT_MARGIN = {
-    "tkw": 80.0,
-    "cena_stara": 0.0,
-    "marza_stara": 40.0,
-    "cena_nowa": 0.0,
-    "marza_nowa": 20.0,
-    "ilosc_stara": 100,
+    "tkw": "80.0",
+    "cena_stara": "",
+    "marza_stara": "40.0",
+    "cena_nowa": "",
+    "marza_nowa": "20.0",
+    "ilosc_stara": "100",
 }
 
 EXAMPLE_QUICK = {
-    "tkw_m": 50.0,
-    "cena_m": 100.0,
-    "marza_m": 50.0,
+    "tkw_m": "50.0",
+    "cena_m": "100.0",
+    "marza_m": "50.0",
 }
 
 for k, v in {**INITIAL_DISCOUNT, **INITIAL_QUICK}.items():
@@ -205,9 +206,7 @@ if st.session_state["selected_tab"] == "discount":
 
     col_a, col_or1, col_b = st.columns([1, 0.15, 1])
     with col_a:
-        tkw = Decimal(
-            st.number_input(T["tkw"], key="tkw", step=0.01)
-        )
+        tkw = _to_decimal(st.text_input(T["tkw"], key="tkw"), none_on_error=True)
         sub_a1, sub_a2, sub_a3 = st.columns([1,1,1])
         with sub_a2:
             st.button(T["btn_clear"], key="clr_tkw", on_click=_clear_field, args=("tkw", INITIAL_DISCOUNT))
@@ -217,18 +216,14 @@ if st.session_state["selected_tab"] == "discount":
             unsafe_allow_html=True,
         )
     with col_b:
-        cena_stara = Decimal(
-            st.number_input(T["price"], key="cena_stara", step=0.01)
-        )
+        cena_stara = _to_decimal(st.text_input(T["price"], key="cena_stara"), none_on_error=True)
         sub_b1, sub_b2, sub_b3 = st.columns([1,1,1])
         with sub_b2:
             st.button(T["btn_clear"], key="clr_cena_stara", on_click=_clear_field, args=("cena_stara", INITIAL_DISCOUNT))
 
     col_c, col_or2, col_d = st.columns([1, 0.15, 1])
     with col_c:
-        marza_stara = Decimal(
-            st.number_input(T["old_margin"], key="marza_stara", step=0.1)
-        )
+        marza_stara = _to_decimal(st.text_input(T["old_margin"], key="marza_stara"), none_on_error=True)
         sub_c1, sub_c2, sub_c3 = st.columns([1,1,1])
         with sub_c2:
             st.button(T["btn_clear"], key="clr_marza_stara", on_click=_clear_field, args=("marza_stara", INITIAL_DISCOUNT))
@@ -238,25 +233,19 @@ if st.session_state["selected_tab"] == "discount":
             unsafe_allow_html=True,
         )
     with col_d:
-        cena_nowa = Decimal(
-            st.number_input(T["new_price"], key="cena_nowa", step=0.01)
-        )
+        cena_nowa = _to_decimal(st.text_input(T["new_price"], key="cena_nowa"), none_on_error=True)
         sub_d1, sub_d2, sub_d3 = st.columns([1,1,1])
         with sub_d2:
             st.button(T["btn_clear"], key="clr_cena_nowa", on_click=_clear_field, args=("cena_nowa", INITIAL_DISCOUNT))
 
     col_e, col_f = st.columns([1, 1])
     with col_e:
-        marza_nowa = Decimal(
-            st.number_input(T["new_margin"], key="marza_nowa", step=0.1)
-        )
+        marza_nowa = _to_decimal(st.text_input(T["new_margin"], key="marza_nowa"), none_on_error=True)
         sub_e1, sub_e2, sub_e3 = st.columns([1,1,1])
         with sub_e2:
             st.button(T["btn_clear"], key="clr_marza_nowa", on_click=_clear_field, args=("marza_nowa", INITIAL_DISCOUNT))
     with col_f:
-        ilosc_stara = int(
-            st.number_input(T["qty"], key="ilosc_stara", step=1)
-        )
+        ilosc_stara = _to_int(st.text_input(T["qty"], key="ilosc_stara"), none_on_error=True)
         sub_f1, sub_f2, sub_f3 = st.columns([1,1,1])
         with sub_f2:
             st.button(T["btn_clear"], key="clr_ilosc_stara", on_click=_clear_field, args=("ilosc_stara", INITIAL_DISCOUNT))
@@ -268,6 +257,9 @@ if st.session_state["selected_tab"] == "discount":
         st.button(T["btn_example"], key="example_discount", on_click=load_discount_example)
 
     if st.button(T["btn_discount"], key="discount_btn"):
+        if None in (tkw, cena_stara, marza_stara, cena_nowa, marza_nowa, ilosc_stara):
+            st.error("Invalid input")
+            st.stop()
 
         if not _entered("tkw") or not _entered("ilosc_stara"):
             st.error(T["err_fill"])
@@ -331,9 +323,7 @@ elif st.session_state["selected_tab"] == "quick":
 
     col_tkw, col_or_a, col_price, col_or_b, col_margin = st.columns([1, 0.13, 1, 0.13, 1])
     with col_tkw:
-        tkw_m = Decimal(
-            st.number_input(T["tkw"], key="tkw_m", step=0.01)
-        )
+        tkw_m = _to_decimal(st.text_input(T["tkw"], key="tkw_m"), none_on_error=True)
         sub_q1, sub_q2, sub_q3 = st.columns([1,1,1])
         with sub_q2:
             st.button(T["btn_clear"], key="clr_tkw_m", on_click=_clear_field, args=("tkw_m", INITIAL_QUICK))
@@ -343,9 +333,7 @@ elif st.session_state["selected_tab"] == "quick":
             unsafe_allow_html=True,
         )
     with col_price:
-        cena_m = Decimal(
-            st.number_input(T["price"], key="cena_m", step=0.01)
-        )
+        cena_m = _to_decimal(st.text_input(T["price"], key="cena_m"), none_on_error=True)
         sub_q4, sub_q5, sub_q6 = st.columns([1,1,1])
         with sub_q5:
             st.button(T["btn_clear"], key="clr_cena_m", on_click=_clear_field, args=("cena_m", INITIAL_QUICK))
@@ -355,13 +343,12 @@ elif st.session_state["selected_tab"] == "quick":
             unsafe_allow_html=True,
         )
     with col_margin:
-        marza_m = Decimal(
-            st.number_input(
+        marza_m = _to_decimal(
+            st.text_input(
                 T["new_margin"].replace("Nowa ", "").replace("New ", "").capitalize(),
                 key="marza_m",
-                step=0.1,
             )
-        )
+        , none_on_error=True)
         sub_q7, sub_q8, sub_q9 = st.columns([1,1,1])
         with sub_q8:
             st.button(T["btn_clear"], key="clr_marza_m", on_click=_clear_field, args=("marza_m", INITIAL_QUICK))
@@ -373,6 +360,9 @@ elif st.session_state["selected_tab"] == "quick":
         st.button(T["btn_example"], key="example_quick", on_click=load_quick_example)
 
     if st.button(T["btn_quick"], key="quick_btn"):
+        if None in (tkw_m, cena_m, marza_m):
+            st.error("Invalid input")
+            st.stop()
 
         pola = [_entered("tkw_m"), _entered("cena_m"), _entered("marza_m")]
         if sum(pola) < 2:
