@@ -186,10 +186,35 @@ from calculator import licz_marze_z_ceny, cena_z_marzy
 # ------------------ UI -------------------------------------
 st.title(T["title"])
 
-tab_obnizka, tab_szybki = st.tabs([T["tab_discount"], T["tab_quick"]])
+# determine active tab from query params or session state
+query = st.experimental_get_query_params()
+default_tab = query.get("tab", ["discount"])[0]
+st.session_state.setdefault("selected_tab", default_tab)
+
+tab_labels = [T["tab_discount"], T["tab_quick"]]
+
+
+def _on_tab_change() -> None:
+    label = st.session_state.get("tab_choice", tab_labels[0])
+    new_key = "discount" if label == T["tab_discount"] else "quick"
+    if new_key != st.session_state.get("selected_tab"):
+        clear_discount_all()
+        clear_quick_all()
+        st.session_state["selected_tab"] = new_key
+        st.experimental_set_query_params(tab=new_key)
+        st.experimental_rerun()
+
+
+st.radio(
+    label="",
+    options=tab_labels,
+    index=0 if st.session_state["selected_tab"] == "discount" else 1,
+    key="tab_choice",
+    on_change=_on_tab_change,
+)
 
 # ========= Zakładka 1: obniżka marży / ceny ================
-with tab_obnizka:
+if st.session_state["selected_tab"] == "discount":
     st.header(T["discount_header"])
 
     col_a, col_or1, col_b = st.columns([1, 0.15, 1])
@@ -299,7 +324,7 @@ with tab_obnizka:
         )
 
 # ========= Zakładka 2: szybki kalkulator ====================
-with tab_szybki:
+elif st.session_state["selected_tab"] == "quick":
     st.header(T["quick_header"])
     st.markdown(
         f"<div style='text-align:center;font-size:0.75em;color:gray'>{T['quick_sub']}</div>",
