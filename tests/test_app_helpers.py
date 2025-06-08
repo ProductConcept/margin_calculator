@@ -4,7 +4,7 @@ from types import SimpleNamespace
 
 
 def load_entered():
-    src = Path('app.py').read_text()
+    src = Path('app.py').read_text(encoding='utf-8')
     tree = ast.parse(src)
     func = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == '_entered')
     st = SimpleNamespace(session_state={})
