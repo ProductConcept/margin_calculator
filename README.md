@@ -69,3 +69,14 @@ docker run -p 8501:8501 margin-calculator
 
 Once running, open `http://localhost:8501` in your browser to use the app.
 
+
+## Streamlit Community Cloud
+
+You can also deploy the calculator on [Streamlit Community Cloud](https://streamlit.io/cloud). Create a new app from this repository, and the service will automatically install the dependencies listed in `requirements.txt` and launch the application with:
+
+```bash
+streamlit run app.py
+```
+
+Make sure to push your code to a Git repository (for example on GitHub) so Streamlit Cloud can access it. If your application uses secrets or other configuration values, define them as environment variables in the app's settings.
+
