@@ -18,6 +18,15 @@ streamlit run app.py
 
 By default Streamlit launches at `http://localhost:8501`. Open this address in your browser to access the calculator.
 
+## Running tests
+
+To run the automated tests, install the project dependencies and execute `pytest`:
+
+```bash
+pip install -r requirements.txt
+pytest
+```
+
 ## Usage
 
 Select the desired language from the sidebar, choose one of the tabs, fill in the required fields and press **Calculate**. The application will display the computed margin and related information.
