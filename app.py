@@ -6,7 +6,6 @@ from utils import _to_decimal, _to_int
 st.set_page_config(
     page_title="Kalkulator Marży / Margin Calculator",
     page_icon="💰",
-    layout="centered",
 )
 
 # Prevent button labels from wrapping
