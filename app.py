@@ -31,14 +31,14 @@ PL = {
     "err_fill": "Uzupełnij TKW oraz ilość sprzedaną wcześniej.",
     "err_pair_old": "Podaj starą marżę lub starą cenę.",
     "err_pair_new": "Podaj nową marżę lub nową cenę.",
-    "err_loss": "Zysk po obniżce wynosi 0 zł lub mniej – obliczenia niemożliwe.",
+    "err_loss": "Zysk po obniżce wynosi 0 lub mniej – obliczenia niemożliwe.",
     "err_two_values": "⚠️ Podaj dowolne dwie wartości.",
     "res_profit_old": "📈 **Zysk przed:** {v:.2f}/szt",
     "res_profit_new": "📉 **Zysk po:** {v:.2f}/szt",
     "res_loss": "💰 **Strata łączna:** {v:.2f}",
     "res_extra": "➕ **Dodatkowa sprzedaż:** {v} szt.",
     "res_total": "📦 **Łącznie:** {v} szt.",
-    "res_quick": "**TKW:** {tkw:.2f} zł  |  **Cena:** {price:.2f} zł  |  **Marża:** {margin:.2f} %",
+    "res_quick": "**TKW:** {tkw:.2f}  |  **Cena:** {price:.2f}  |  **Marża:** {margin:.2f} %",
     "author": "Autor programu: Marcin Czerwiński  |  Product Concept"
 }
 EN = {
@@ -48,11 +48,11 @@ EN = {
     "discount_header": "📉 Margin / price drop",
     "quick_header": "⚙️ Quick margin calculator",
     "quick_sub": "(fill any 2 fields)",
-    "tkw": "Production cost (unit cost) [PLN]",
-    "price": "Sale price [PLN]",
+    "tkw": "Production cost (unit cost)",
+    "price": "Sale price",
     "old_margin": "Current margin [%]",
     "new_margin": "New margin [%]",
-    "new_price": "New sale price [PLN]",
+    "new_price": "New sale price",
     "qty": "Quantity sold before [pcs]",
     "btn_discount": "Calculate",
     "btn_quick": "Calculate",
@@ -65,12 +65,12 @@ EN = {
     "err_pair_new": "Provide either new margin or new price.",
     "err_loss": "Profit after drop is 0 or negative – cannot compute.",
     "err_two_values": "⚠️ Provide any two values.",
-    "res_profit_old": "📈 **Profit before:** {v:.2f} PLN/pc",
-    "res_profit_new": "📉 **Profit after:** {v:.2f} PLN/pc",
-    "res_loss": "💰 **Total loss:** {v:.2f} PLN",
+    "res_profit_old": "📈 **Profit before:** {v:.2f}/pc",
+    "res_profit_new": "📉 **Profit after:** {v:.2f}/pc",
+    "res_loss": "💰 **Total loss:** {v:.2f}",
     "res_extra": "➕ **Extra sales needed:** {v} pcs",
     "res_total": "📦 **Total:** {v} pcs",
-    "res_quick": "**Production cost:** {tkw:.2f} PLN  |  **Price:** {price:.2f} PLN  |  **Margin:** {margin:.2f} %",
+    "res_quick": "**Production cost:** {tkw:.2f}  |  **Price:** {price:.2f}  |  **Margin:** {margin:.2f} %",
     "author": "Program author: Marcin Czerwiński  |  Product Concept"
 }
 
