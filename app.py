@@ -4,7 +4,10 @@ from decimal import Decimal
 
 import streamlit as st
 
-from margin_calculator.calculator import cena_z_marzy, licz_marze_z_ceny
+try:  # Prefer relative import when installed as a package
+    from .calculator import cena_z_marzy, licz_marze_z_ceny
+except ImportError:  # Fallback for running as a standalone script
+    from calculator import cena_z_marzy, licz_marze_z_ceny
 
 # ------------------ Konfiguracja / Config ------------------
 st.set_page_config(
