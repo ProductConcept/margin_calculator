@@ -1,3 +1,5 @@
+"""Helper functions performing margin-related calculations."""
+
 from decimal import Decimal
 
 
