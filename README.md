@@ -9,10 +9,10 @@ The application supports both Polish and English languages and runs entirely in 
 
 ## Setup
 
-Install the required packages and set up the pre-commit hooks before starting the application:
+Install the package in editable mode and set up the pre-commit hooks before starting the application:
 
 ```bash
-pip install -r requirements.txt
+pip install -e .
 pip install pre-commit
 pre-commit install
 streamlit run app.py
@@ -22,10 +22,10 @@ By default Streamlit launches at `http://localhost:8501`. Open this address in y
 
 ## Running tests
 
-To run the automated tests, install the project dependencies and execute `pytest`:
+To run the automated tests, install the project in editable mode and execute `pytest`:
 
 ```bash
-pip install -r requirements.txt
+pip install -e .
 pytest
 ```
 
