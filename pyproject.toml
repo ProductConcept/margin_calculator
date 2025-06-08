@@ -9,6 +9,9 @@ dependencies = [
     "streamlit==1.45.1",
 ]
 
+[project.scripts]
+margin-calc = "margin_calculator.cli:main"
+
 [tool.setuptools]
 packages = ["margin_calculator"]
 [tool.setuptools.package-dir]
