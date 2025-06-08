@@ -1,5 +1,5 @@
 import streamlit as st
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 
 # ------------------ Konfiguracja / Config ------------------
 st.set_page_config(
@@ -73,33 +73,33 @@ T = PL if lang == "Polski" else EN
 
 # ------------------ Session state defaults -----------------
 INITIAL_DISCOUNT = {
-    "tkw": 0.0,
-    "cena_stara": 0.0,
-    "marza_stara": 0.0,
-    "cena_nowa": 0.0,
-    "marza_nowa": 0.0,
-    "ilosc_stara": 0,
+    "tkw": "",
+    "cena_stara": "",
+    "marza_stara": "",
+    "cena_nowa": "",
+    "marza_nowa": "",
+    "ilosc_stara": "",
 }
 
 INITIAL_QUICK = {
-    "tkw_m": 0.0,
-    "cena_m": 0.0,
-    "marza_m": 0.0,
+    "tkw_m": "",
+    "cena_m": "",
+    "marza_m": "",
 }
 
 EXAMPLE_DISCOUNT = {
-    "tkw": 80.0,
-    "cena_stara": 120.0,
-    "marza_stara": 33.33,
-    "cena_nowa": 100.0,
-    "marza_nowa": 20.0,
-    "ilosc_stara": 100,
+    "tkw": "80.0",
+    "cena_stara": "120.0",
+    "marza_stara": "33.33",
+    "cena_nowa": "100.0",
+    "marza_nowa": "20.0",
+    "ilosc_stara": "100",
 }
 
 EXAMPLE_QUICK = {
-    "tkw_m": 50.0,
-    "cena_m": 100.0,
-    "marza_m": 50.0,
+    "tkw_m": "50.0",
+    "cena_m": "100.0",
+    "marza_m": "50.0",
 }
 
 for k, v in {**INITIAL_DISCOUNT, **INITIAL_QUICK}.items():
@@ -130,6 +130,24 @@ def load_quick_example() -> None:
     for k in INITIAL_QUICK:
         st.session_state[k] = EXAMPLE_QUICK[k]
 
+
+def _to_decimal(value: str) -> Decimal:
+    """Convert user input to ``Decimal``. Returns ``Decimal('0')`` on error."""
+    if value is None or value == "":
+        return Decimal("0")
+    try:
+        return Decimal(value.replace(",", "."))
+    except (InvalidOperation, AttributeError):
+        return Decimal("0")
+
+
+def _to_int(value: str) -> int:
+    """Convert user input to ``int``. Returns ``0`` on error."""
+    try:
+        return int(_to_decimal(value))
+    except (InvalidOperation, ValueError):
+        return 0
+
 # ------------------ Funkcje matematyczne -------------------
 
 from calculator import licz_marze_z_ceny, cena_z_marzy
@@ -145,7 +163,7 @@ with tab_obnizka:
 
     col_a, col_or1, col_b = st.columns([1, 0.15, 1])
     with col_a:
-        tkw = st.number_input(T["tkw"], min_value=0.0, step=0.01, key="tkw")
+        tkw = _to_decimal(st.text_input(T["tkw"], key="tkw"))
         st.button("Clear", key="clr_tkw", on_click=_clear_field, args=("tkw", INITIAL_DISCOUNT))
     with col_or1:
         st.markdown(
@@ -153,12 +171,12 @@ with tab_obnizka:
             unsafe_allow_html=True,
         )
     with col_b:
-        cena_stara = st.number_input(T["price"], min_value=0.0, step=0.01, key="cena_stara")
+        cena_stara = _to_decimal(st.text_input(T["price"], key="cena_stara"))
         st.button("Clear", key="clr_cena_stara", on_click=_clear_field, args=("cena_stara", INITIAL_DISCOUNT))
 
     col_c, col_or2, col_d = st.columns([1, 0.15, 1])
     with col_c:
-        marza_stara = st.number_input(T["old_margin"], min_value=0.0, step=0.01, format="%.2f", key="marza_stara")
+        marza_stara = _to_decimal(st.text_input(T["old_margin"], key="marza_stara"))
         st.button("Clear", key="clr_marza_stara", on_click=_clear_field, args=("marza_stara", INITIAL_DISCOUNT))
     with col_or2:
         st.markdown(
@@ -166,15 +184,15 @@ with tab_obnizka:
             unsafe_allow_html=True,
         )
     with col_d:
-        cena_nowa = st.number_input(T["new_price"], min_value=0.0, step=0.01, key="cena_nowa")
+        cena_nowa = _to_decimal(st.text_input(T["new_price"], key="cena_nowa"))
         st.button("Clear", key="clr_cena_nowa", on_click=_clear_field, args=("cena_nowa", INITIAL_DISCOUNT))
 
     col_e, col_f = st.columns([1, 1])
     with col_e:
-        marza_nowa = st.number_input(T["new_margin"], min_value=0.0, step=0.01, format="%.2f", key="marza_nowa")
+        marza_nowa = _to_decimal(st.text_input(T["new_margin"], key="marza_nowa"))
         st.button("Clear", key="clr_marza_nowa", on_click=_clear_field, args=("marza_nowa", INITIAL_DISCOUNT))
     with col_f:
-        ilosc_stara = st.number_input(T["qty"], min_value=0, step=1, key="ilosc_stara")
+        ilosc_stara = _to_int(st.text_input(T["qty"], key="ilosc_stara"))
         st.button("Clear", key="clr_ilosc_stara", on_click=_clear_field, args=("ilosc_stara", INITIAL_DISCOUNT))
 
     col_actions_d1, col_actions_d2 = st.columns([1, 1])
@@ -242,7 +260,7 @@ with tab_szybki:
 
     col_tkw, col_or_a, col_price, col_or_b, col_margin = st.columns([1, 0.13, 1, 0.13, 1])
     with col_tkw:
-        tkw_m = st.number_input(T["tkw"], min_value=0.0, step=0.01, key="tkw_m")
+        tkw_m = _to_decimal(st.text_input(T["tkw"], key="tkw_m"))
         st.button("Clear", key="clr_tkw_m", on_click=_clear_field, args=("tkw_m", INITIAL_QUICK))
     with col_or_a:
         st.markdown(
@@ -250,7 +268,7 @@ with tab_szybki:
             unsafe_allow_html=True,
         )
     with col_price:
-        cena_m = st.number_input(T["price"], min_value=0.0, step=0.01, key="cena_m")
+        cena_m = _to_decimal(st.text_input(T["price"], key="cena_m"))
         st.button("Clear", key="clr_cena_m", on_click=_clear_field, args=("cena_m", INITIAL_QUICK))
     with col_or_b:
         st.markdown(
@@ -258,11 +276,11 @@ with tab_szybki:
             unsafe_allow_html=True,
         )
     with col_margin:
-        marza_m = st.number_input(
-            T["new_margin"].replace("Nowa ", "").replace("New ", "").capitalize(),
-            min_value=0.0,
-            step=0.01,
-            key="marza_m",
+        marza_m = _to_decimal(
+            st.text_input(
+                T["new_margin"].replace("Nowa ", "").replace("New ", "").capitalize(),
+                key="marza_m",
+            )
         )
         st.button("Clear", key="clr_marza_m", on_click=_clear_field, args=("marza_m", INITIAL_QUICK))
 
