@@ -1,3 +1,5 @@
+"""Utility helpers for converting user input to numeric types."""
+
 from decimal import Decimal, InvalidOperation
 from typing import Optional
 
