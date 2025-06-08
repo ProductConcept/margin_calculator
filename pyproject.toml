@@ -8,3 +8,4 @@ version = "0.1.0"
 dependencies = [
     "streamlit==1.45.1",
 ]
+packages = ["margin_calculator"]
