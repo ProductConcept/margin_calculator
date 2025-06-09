@@ -56,7 +56,8 @@ def compat_submit_button(label: str, *, key=None, on_click=None, args=None):
 
         digest = hashlib.sha256(str(key).encode()).digest()
         bits = "".join(f"{b:08b}" for b in digest)
-        zw = "".join("\u200b" if bit == "0" else "\u200c" for bit in bits)
+        # Use zero width joiner characters which don't introduce line breaks
+        zw = "".join("\u2060" if bit == "0" else "\u200d" for bit in bits)
         label_mod += zw
     elif "key" in _fsb_params and key is not None:
         kwargs["key"] = key
