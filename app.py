@@ -18,7 +18,7 @@ st.set_page_config(
 
 # Prevent button labels from wrapping
 st.markdown(
-    "<style>div.stButton>button{white-space:nowrap}</style>",
+    "<style>div.stButton>button, form button[type=submit]{white-space:nowrap}</style>",
     unsafe_allow_html=True,
 )
 
