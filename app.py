@@ -22,6 +22,26 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+# Ensure uniform size and centered text for all number inputs
+st.markdown(
+    """
+    <style>
+        div.stNumberInput>label {
+            display: block;
+            text-align: center;
+            white-space: nowrap;
+        }
+        div.stNumberInput input {
+            text-align: center;
+        }
+        div.stNumberInput>div {
+            width: 100%;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # Compatibility helper for older Streamlit versions.
 _fsb_params = inspect.signature(st.form_submit_button).parameters
 
