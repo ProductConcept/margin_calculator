@@ -429,7 +429,7 @@ elif st.session_state["selected_tab"] == "quick":
     with st.form("quick_form"):
         or_html = f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>"
         st.markdown(
-            f"<div style='text-align:center;font-size:0.75em;color:gray'>{T['quick_sub']}</div>",
+            f"<div style='text-align:center;font-size:0.75em;color:gray;font-family:var(--font);'>{T['quick_sub']}</div>",
             unsafe_allow_html=True,
         )
 
