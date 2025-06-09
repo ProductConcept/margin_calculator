@@ -282,7 +282,7 @@ if st.session_state["selected_tab"] == "discount":
         col_a, col_or1, col_b = st.columns([1, 0.15, 1])
         with col_a:
             tkw = Decimal(
-                str(st.number_input(T["tkw"], key="tkw", value=0.0))
+                str(st.number_input(T["tkw"], key="tkw"))
             )
             sub_a1, sub_a2, sub_a3 = st.columns([1, 1, 1])
             with sub_a2:
@@ -297,7 +297,7 @@ if st.session_state["selected_tab"] == "discount":
             st.markdown(or_html, unsafe_allow_html=True)
         with col_b:
             cena_stara = Decimal(
-                str(st.number_input(T["price"], key="cena_stara", value=0.0))
+                str(st.number_input(T["price"], key="cena_stara"))
             )
             sub_b1, sub_b2, sub_b3 = st.columns([1, 1, 1])
             with sub_b2:
@@ -311,7 +311,7 @@ if st.session_state["selected_tab"] == "discount":
         col_c, col_or2, col_d = st.columns([1, 0.15, 1])
         with col_c:
             marza_stara = Decimal(
-                str(st.number_input(T["old_margin"], key="marza_stara", value=0.0))
+                str(st.number_input(T["old_margin"], key="marza_stara"))
             )
             sub_c1, sub_c2, sub_c3 = st.columns([1, 1, 1])
             with sub_c2:
@@ -325,7 +325,7 @@ if st.session_state["selected_tab"] == "discount":
             st.markdown(or_html, unsafe_allow_html=True)
         with col_d:
             cena_nowa = Decimal(
-                str(st.number_input(T["new_price"], key="cena_nowa", value=0.0))
+                str(st.number_input(T["new_price"], key="cena_nowa"))
             )
             sub_d1, sub_d2, sub_d3 = st.columns([1, 1, 1])
             with sub_d2:
@@ -339,7 +339,7 @@ if st.session_state["selected_tab"] == "discount":
         col_e, col_f = st.columns([1, 1])
         with col_e:
             marza_nowa = Decimal(
-                str(st.number_input(T["new_margin"], key="marza_nowa", value=0.0))
+                str(st.number_input(T["new_margin"], key="marza_nowa"))
             )
             sub_e1, sub_e2, sub_e3 = st.columns([1, 1, 1])
             with sub_e2:
@@ -351,7 +351,7 @@ if st.session_state["selected_tab"] == "discount":
                 )
         with col_f:
             ilosc_stara = Decimal(
-                str(st.number_input(T["qty"], key="ilosc_stara", value=0, step=1))
+                str(st.number_input(T["qty"], key="ilosc_stara", step=1))
             )
             sub_f1, sub_f2, sub_f3 = st.columns([1, 1, 1])
             with sub_f2:
@@ -457,7 +457,7 @@ elif st.session_state["selected_tab"] == "quick":
         )
         with col_tkw:
             tkw_m = Decimal(
-                str(st.number_input(T["tkw"], key="tkw_m", value=0.0))
+                str(st.number_input(T["tkw"], key="tkw_m"))
             )
             sub_q1, sub_q2, sub_q3 = st.columns([1, 1, 1])
             with sub_q2:
@@ -471,7 +471,7 @@ elif st.session_state["selected_tab"] == "quick":
             st.markdown(or_html, unsafe_allow_html=True)
         with col_price:
             cena_m = Decimal(
-                str(st.number_input(T["price"], key="cena_m", value=0.0))
+                str(st.number_input(T["price"], key="cena_m"))
             )
             sub_q4, sub_q5, sub_q6 = st.columns([1, 1, 1])
             with sub_q5:
@@ -489,7 +489,6 @@ elif st.session_state["selected_tab"] == "quick":
                     st.number_input(
                         T["new_margin"].replace("Nowa ", "").replace("New ", "").capitalize(),
                         key="marza_m",
-                        value=0.0,
                     )
                 )
             )
