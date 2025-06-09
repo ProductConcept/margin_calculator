@@ -245,6 +245,21 @@ def load_quick_example_cb() -> None:
     load_quick_example()
 
 
+def number_input_with_clear(label: str, key: str, init_dict: dict, **kwargs) -> Decimal:
+    """Return a ``Decimal`` from a number input paired with a clear button."""
+    col_field, col_btn = st.columns([5, 1])
+    with col_field:
+        val = st.number_input(label, key=key, **kwargs)
+    with col_btn:
+        compat_submit_button(
+            T["btn_clear"],
+            key=f"clear_{key}",
+            on_click=_clear_field_cb,
+            args=(key, init_dict),
+        )
+    return Decimal(str(val))
+
+
 def _entered(key: str) -> bool:
     """Return ``True`` if the user explicitly provided a value for ``key``."""
     val = st.session_state.get(key)
@@ -301,86 +316,31 @@ if st.session_state["selected_tab"] == "discount":
 
         col_a, col_or1, col_b = st.columns([1, 0.15, 1])
         with col_a:
-            tkw = Decimal(
-                str(st.number_input(T["tkw"], key="tkw"))
-            )
-            sub_a1, sub_a2, sub_a3 = st.columns([1, 1, 1])
-            with sub_a2:
-                compat_submit_button(
-                    T["btn_clear"],
-                    key="clear_tkw",
-                    on_click=_clear_field_cb,
-                    args=("tkw", INITIAL_DISCOUNT),
-                )
+            tkw = number_input_with_clear(T["tkw"], "tkw", INITIAL_DISCOUNT)
         with col_or1:
             or_html = f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>"
             st.markdown(or_html, unsafe_allow_html=True)
         with col_b:
-            cena_stara = Decimal(
-                str(st.number_input(T["price"], key="cena_stara"))
-            )
-            sub_b1, sub_b2, sub_b3 = st.columns([1, 1, 1])
-            with sub_b2:
-                compat_submit_button(
-                    T["btn_clear"],
-                    key="clear_cena_stara",
-                    on_click=_clear_field_cb,
-                    args=("cena_stara", INITIAL_DISCOUNT),
-                )
+            cena_stara = number_input_with_clear(T["price"], "cena_stara", INITIAL_DISCOUNT)
 
         col_c, col_or2, col_d = st.columns([1, 0.15, 1])
         with col_c:
-            marza_stara = Decimal(
-                str(st.number_input(T["old_margin"], key="marza_stara"))
-            )
-            sub_c1, sub_c2, sub_c3 = st.columns([1, 1, 1])
-            with sub_c2:
-                compat_submit_button(
-                    T["btn_clear"],
-                    key="clear_marza_stara",
-                    on_click=_clear_field_cb,
-                    args=("marza_stara", INITIAL_DISCOUNT),
-                )
+            marza_stara = number_input_with_clear(T["old_margin"], "marza_stara", INITIAL_DISCOUNT)
         with col_or2:
             st.markdown(or_html, unsafe_allow_html=True)
         with col_d:
-            cena_nowa = Decimal(
-                str(st.number_input(T["new_price"], key="cena_nowa"))
-            )
-            sub_d1, sub_d2, sub_d3 = st.columns([1, 1, 1])
-            with sub_d2:
-                compat_submit_button(
-                    T["btn_clear"],
-                    key="clear_cena_nowa",
-                    on_click=_clear_field_cb,
-                    args=("cena_nowa", INITIAL_DISCOUNT),
-                )
+            cena_nowa = number_input_with_clear(T["new_price"], "cena_nowa", INITIAL_DISCOUNT)
 
         col_e, col_f = st.columns([1, 1])
         with col_e:
-            marza_nowa = Decimal(
-                str(st.number_input(T["new_margin"], key="marza_nowa"))
-            )
-            sub_e1, sub_e2, sub_e3 = st.columns([1, 1, 1])
-            with sub_e2:
-                compat_submit_button(
-                    T["btn_clear"],
-                    key="clear_marza_nowa",
-                    on_click=_clear_field_cb,
-                    args=("marza_nowa", INITIAL_DISCOUNT),
-                )
+            marza_nowa = number_input_with_clear(T["new_margin"], "marza_nowa", INITIAL_DISCOUNT)
         with col_f:
-            ilosc_stara = Decimal(
-                str(st.number_input(T["qty"], key="ilosc_stara", step=1))
+            ilosc_stara = number_input_with_clear(
+                T["qty"],
+                "ilosc_stara",
+                INITIAL_DISCOUNT,
+                step=1,
             )
-            sub_f1, sub_f2, sub_f3 = st.columns([1, 1, 1])
-            with sub_f2:
-                compat_submit_button(
-                    T["btn_clear"],
-                    key="clear_ilosc_stara",
-                    on_click=_clear_field_cb,
-                    args=("ilosc_stara", INITIAL_DISCOUNT),
-                )
 
         col_actions_d1, col_actions_d2 = st.columns([1, 1])
         with col_actions_d1:
@@ -476,50 +436,19 @@ elif st.session_state["selected_tab"] == "quick":
             [1, 0.13, 1, 0.13, 1]
         )
         with col_tkw:
-            tkw_m = Decimal(
-                str(st.number_input(T["tkw"], key="tkw_m"))
-            )
-            sub_q1, sub_q2, sub_q3 = st.columns([1, 1, 1])
-            with sub_q2:
-                compat_submit_button(
-                    T["btn_clear"],
-                    key="clear_tkw_m",
-                    on_click=_clear_field_cb,
-                    args=("tkw_m", INITIAL_QUICK),
-                )
+            tkw_m = number_input_with_clear(T["tkw"], "tkw_m", INITIAL_QUICK)
         with col_or_a:
             st.markdown(or_html, unsafe_allow_html=True)
         with col_price:
-            cena_m = Decimal(
-                str(st.number_input(T["price"], key="cena_m"))
-            )
-            sub_q4, sub_q5, sub_q6 = st.columns([1, 1, 1])
-            with sub_q5:
-                compat_submit_button(
-                    T["btn_clear"],
-                    key="clear_cena_m",
-                    on_click=_clear_field_cb,
-                    args=("cena_m", INITIAL_QUICK),
-                )
+            cena_m = number_input_with_clear(T["price"], "cena_m", INITIAL_QUICK)
         with col_or_b:
             st.markdown(or_html, unsafe_allow_html=True)
         with col_margin:
-            marza_m = Decimal(
-                str(
-                    st.number_input(
-                        T["new_margin"].replace("Nowa ", "").replace("New ", "").capitalize(),
-                        key="marza_m",
-                    )
-                )
+            marza_m = number_input_with_clear(
+                T["new_margin"].replace("Nowa ", "").replace("New ", "").capitalize(),
+                "marza_m",
+                INITIAL_QUICK,
             )
-            sub_q7, sub_q8, sub_q9 = st.columns([1, 1, 1])
-            with sub_q8:
-                compat_submit_button(
-                    T["btn_clear"],
-                    key="clear_marza_m",
-                    on_click=_clear_field_cb,
-                    args=("marza_m", INITIAL_QUICK),
-                )
 
         col_actions_q1, col_actions_q2 = st.columns([1, 1])
         with col_actions_q1:
