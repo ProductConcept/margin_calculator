@@ -246,10 +246,9 @@ def load_quick_example_cb() -> None:
 
 
 def number_input_with_clear(label: str, key: str, init_dict: dict, **kwargs) -> Decimal:
-    """Return a ``Decimal`` from a number input paired with a clear button."""
-    col_field, col_btn = st.columns([5, 1])
-    with col_field:
-        val = st.number_input(label, key=key, **kwargs)
+    """Return a ``Decimal`` from a number input with a centered clear button."""
+    val = st.number_input(label, key=key, **kwargs)
+    col_left, col_btn, col_right = st.columns([1, 1, 1])
     with col_btn:
         compat_submit_button(
             T["btn_clear"],
