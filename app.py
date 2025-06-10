@@ -262,12 +262,12 @@ def number_input_with_clear(label: str, key: str, init_dict: dict, **kwargs) -> 
             if (el) {{
                 el.id = '{key}';
                 const clearIfZero = () => {{
-                    if (el.value !== '' && parseFloat(el.value) === 0) {{
+                    if (!el.dataset.cleared && el.value !== '' && parseFloat(el.value) === 0) {{
                         el.value = '';
+                        el.dataset.cleared = '1';
                     }}
                 }};
-                el.addEventListener('focus', clearIfZero);
-                el.addEventListener('keydown', clearIfZero);
+                el.addEventListener('focus', clearIfZero, {{ once: true }});
             }}
         }})();
         </script>
