@@ -262,7 +262,7 @@ def number_input_with_clear(label: str, key: str, init_dict: dict, **kwargs) -> 
             if (el) {{
                 el.id = '{key}';
                 const clearIfZero = () => {{
-                    if (el.value === '0') {{
+                    if (el.value !== '' && parseFloat(el.value) === 0) {{
                         el.value = '';
                     }}
                 }};
