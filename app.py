@@ -164,17 +164,17 @@ INITIAL_QUICK = {
 EXAMPLE_DISCOUNT_PRICE = {
     "tkw": 80.0,
     "cena_stara": 120.0,
-    "marza_stara": 0.0,
+    "marza_stara": None,
     "cena_nowa": 100.0,
-    "marza_nowa": 0.0,
+    "marza_nowa": None,
     "ilosc_stara": 100,
 }
 
 EXAMPLE_DISCOUNT_MARGIN = {
     "tkw": 80.0,
-    "cena_stara": 0.0,
+    "cena_stara": None,
     "marza_stara": 40.0,
-    "cena_nowa": 0.0,
+    "cena_nowa": None,
     "marza_nowa": 20.0,
     "ilosc_stara": 100,
 }

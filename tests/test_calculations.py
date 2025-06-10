@@ -59,6 +59,22 @@ class TestMarginFunctions(unittest.TestCase):
         strata = (zysk_stary - zysk_nowy) * qty
         self.assertEqual(strata, Decimal('3333'))
 
+    def test_example_discount_price_positive_profit(self):
+        """Example with price inputs should yield positive profit after drop."""
+        tkw = Decimal('80')
+        cena_stara = Decimal('120')
+        cena_nowa = Decimal('100')
+
+        marza_stara = licz_marze_z_ceny(tkw, cena_stara) * 100
+        marza_nowa = licz_marze_z_ceny(tkw, cena_nowa) * 100
+
+        zysk_stary = cena_stara - tkw
+        zysk_nowy = cena_nowa - tkw
+
+        self.assertEqual(marza_stara, Decimal('33.33333333333333333333333333'))
+        self.assertEqual(marza_nowa, Decimal('20'))
+        self.assertGreater(zysk_nowy, Decimal('0'))
+
 
 if __name__ == '__main__':
     unittest.main()
