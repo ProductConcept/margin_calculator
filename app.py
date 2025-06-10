@@ -250,9 +250,9 @@ def number_input_with_clear(label: str, key: str, init_dict: dict, **kwargs) -> 
     """Return a ``Decimal`` from a number input with a centered clear button."""
     val = st.number_input(label, key=key, **kwargs)
 
-    # assign an HTML id and attach JS to clear the default zero value when the
-    # field receives focus or a key press. We select the last number input which
-    # corresponds to the widget just created above.
+    # assign an HTML id and attach JS to clear the default zero value. We
+    # select the last number input which corresponds to the widget just created
+    # above.
     st.markdown(
         f"""
         <script>
@@ -266,6 +266,8 @@ def number_input_with_clear(label: str, key: str, init_dict: dict, **kwargs) -> 
                         el.value = '';
                     }}
                 }};
+                // Clear immediately so users don't see the default 0 value
+                clearIfZero();
                 el.addEventListener('focus', clearIfZero);
             }}
         }})();
