@@ -258,18 +258,15 @@ def number_input_with_clear(label: str, key: str, init_dict: dict, **kwargs) -> 
         <script>
         (() => {{
             const inputs = window.document.querySelectorAll('div[data-testid="stNumberInput"] input[type=number]');
-            window._numInputIdx = (window._numInputIdx || 0);
-            const el = inputs[window._numInputIdx];
+            const el = inputs[inputs.length - 1];
             if (el) {{
-                window._numInputIdx += 1;
                 el.id = '{key}';
                 const clearIfZero = () => {{
-                    if (!el.dataset.cleared && el.value !== '' && parseFloat(el.value) === 0) {{
+                    if (el.value !== '' && parseFloat(el.value) === 0) {{
                         el.value = '';
-                        el.dataset.cleared = '1';
                     }}
                 }};
-                el.addEventListener('focus', clearIfZero, {{ once: true }});
+                el.addEventListener('focus', clearIfZero);
             }}
         }})();
         </script>
