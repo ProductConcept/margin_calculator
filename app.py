@@ -249,6 +249,32 @@ def load_quick_example_cb() -> None:
 def number_input_with_clear(label: str, key: str, init_dict: dict, **kwargs) -> Decimal:
     """Return a ``Decimal`` from a number input with a centered clear button."""
     val = st.number_input(label, key=key, **kwargs)
+
+    # assign an HTML id and attach JS to clear the default zero value when the
+    # field receives focus or a key press. We select the last number input which
+    # corresponds to the widget just created above.
+    st.markdown(
+        f"""
+        <script>
+        (() => {{
+            const inputs = window.document.querySelectorAll('div[data-testid="stNumberInput"] input[type=number]');
+            const el = inputs[inputs.length - 1];
+            if (el) {{
+                el.id = '{key}';
+                const clearIfZero = () => {{
+                    if (el.value === '0') {{
+                        el.value = '';
+                    }}
+                }};
+                el.addEventListener('focus', clearIfZero);
+                el.addEventListener('keydown', clearIfZero);
+            }}
+        }})();
+        </script>
+        """,
+        unsafe_allow_html=True,
+    )
+
     # give the button column extra width so the label doesn't wrap
     col_left, col_btn, col_right = st.columns([1, 2, 1])
     with col_btn:
