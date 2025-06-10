@@ -1,9 +1,9 @@
 """Streamlit application for interactive margin calculations."""
 
+import inspect
 from decimal import Decimal
 
 import streamlit as st
-import inspect
 
 try:  # Prefer relative import when installed as a package
     from .calculator import cena_z_marzy, licz_marze_z_ceny
@@ -72,6 +72,7 @@ def compat_submit_button(label: str, *, key=None, on_click=None, args=None):
         else:
             on_click()
     return pressed
+
 
 # ------------------ Tłumaczenia / Translations -------------
 PL = {
@@ -146,18 +147,18 @@ T = PL if lang == "Polski" else EN
 
 # ------------------ Session state defaults -----------------
 INITIAL_DISCOUNT = {
-    "tkw": 0.0,
-    "cena_stara": 0.0,
-    "marza_stara": 0.0,
-    "cena_nowa": 0.0,
-    "marza_nowa": 0.0,
-    "ilosc_stara": 0,
+    "tkw": None,
+    "cena_stara": None,
+    "marza_stara": None,
+    "cena_nowa": None,
+    "marza_nowa": None,
+    "ilosc_stara": None,
 }
 
 INITIAL_QUICK = {
-    "tkw_m": 0.0,
-    "cena_m": 0.0,
-    "marza_m": 0.0,
+    "tkw_m": None,
+    "cena_m": None,
+    "marza_m": None,
 }
 
 EXAMPLE_DISCOUNT_PRICE = {
@@ -246,35 +247,11 @@ def load_quick_example_cb() -> None:
     load_quick_example()
 
 
-def number_input_with_clear(label: str, key: str, init_dict: dict, **kwargs) -> Decimal:
+def number_input_with_clear(
+    label: str, key: str, init_dict: dict, **kwargs
+) -> Decimal | None:
     """Return a ``Decimal`` from a number input with a centered clear button."""
-    val = st.number_input(label, key=key, **kwargs)
-
-    # assign an HTML id and attach JS to clear the default zero value. We
-    # select the last number input which corresponds to the widget just created
-    # above.
-    st.markdown(
-        f"""
-        <script>
-        (() => {{
-            const inputs = window.document.querySelectorAll('div[data-testid="stNumberInput"] input[type=number]');
-            const el = inputs[inputs.length - 1];
-            if (el) {{
-                el.id = '{key}';
-                const clearIfZero = () => {{
-                    if (el.value !== '' && parseFloat(el.value) === 0) {{
-                        el.value = '';
-                    }}
-                }};
-                // Clear immediately so users don't see the default 0 value
-                clearIfZero();
-                el.addEventListener('focus', clearIfZero);
-            }}
-        }})();
-        </script>
-        """,
-        unsafe_allow_html=True,
-    )
+    val = st.number_input(label, key=key, value=None, **kwargs)
 
     # give the button column extra width so the label doesn't wrap
     col_left, col_btn, col_right = st.columns([1, 2, 1])
@@ -285,7 +262,7 @@ def number_input_with_clear(label: str, key: str, init_dict: dict, **kwargs) -> 
             on_click=_clear_field_cb,
             args=(key, init_dict),
         )
-    return Decimal(str(val))
+    return Decimal(str(val)) if val is not None else None
 
 
 def _entered(key: str) -> bool:
@@ -349,19 +326,27 @@ if st.session_state["selected_tab"] == "discount":
             or_html = f"<div style='text-align:center; padding-top:2.3rem; font-weight:700;'>{T['or']}</div>"
             st.markdown(or_html, unsafe_allow_html=True)
         with col_b:
-            cena_stara = number_input_with_clear(T["price"], "cena_stara", INITIAL_DISCOUNT)
+            cena_stara = number_input_with_clear(
+                T["price"], "cena_stara", INITIAL_DISCOUNT
+            )
 
         col_c, col_or2, col_d = st.columns([1, 0.15, 1])
         with col_c:
-            marza_stara = number_input_with_clear(T["old_margin"], "marza_stara", INITIAL_DISCOUNT)
+            marza_stara = number_input_with_clear(
+                T["old_margin"], "marza_stara", INITIAL_DISCOUNT
+            )
         with col_or2:
             st.markdown(or_html, unsafe_allow_html=True)
         with col_d:
-            cena_nowa = number_input_with_clear(T["new_price"], "cena_nowa", INITIAL_DISCOUNT)
+            cena_nowa = number_input_with_clear(
+                T["new_price"], "cena_nowa", INITIAL_DISCOUNT
+            )
 
         col_e, col_f = st.columns([1, 1])
         with col_e:
-            marza_nowa = number_input_with_clear(T["new_margin"], "marza_nowa", INITIAL_DISCOUNT)
+            marza_nowa = number_input_with_clear(
+                T["new_margin"], "marza_nowa", INITIAL_DISCOUNT
+            )
         with col_f:
             ilosc_stara = number_input_with_clear(
                 T["qty"],
@@ -390,16 +375,6 @@ if st.session_state["selected_tab"] == "discount":
         )
     if submitted_discount:
         with st.spinner("Obliczanie..."):
-            if None in (
-                tkw,
-                cena_stara,
-                marza_stara,
-                cena_nowa,
-                marza_nowa,
-                ilosc_stara,
-            ):
-                st.error("Invalid input")
-                st.stop()
 
             if not _entered("tkw") or not _entered("ilosc_stara"):
                 st.error(T["err_fill"])
@@ -498,9 +473,6 @@ elif st.session_state["selected_tab"] == "quick":
         )
     if submitted_quick:
         with st.spinner("Obliczanie..."):
-            if None in (tkw_m, cena_m, marza_m):
-                st.error("Invalid input")
-                st.stop()
 
             pola = [_entered("tkw_m"), _entered("cena_m"), _entered("marza_m")]
             if sum(pola) < 2:
@@ -510,9 +482,9 @@ elif st.session_state["selected_tab"] == "quick":
             if _entered("cena_m") and _entered("tkw_m"):
                 marza_m = licz_marze_z_ceny(tkw_m, cena_m) * 100
             elif _entered("tkw_m") and _entered("marza_m"):
-                cena_m = cena_z_marzy(
-                    tkw_m, marza_m / Decimal(100)
-                ).quantize(Decimal("0.01"))
+                cena_m = cena_z_marzy(tkw_m, marza_m / Decimal(100)).quantize(
+                    Decimal("0.01")
+                )
             elif _entered("cena_m") and _entered("marza_m"):
                 tkw_m = cena_m * (Decimal("1") - marza_m / Decimal(100))
 
